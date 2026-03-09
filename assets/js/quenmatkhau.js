@@ -1,13 +1,17 @@
-// Xử lý form quên mật khẩu
-document.getElementById("forgotForm")?.addEventListener("submit", function(e) {
-  e.preventDefault();
-  const email = document.getElementById("email").value.trim();
+// quenmatkhau.js
+// Logic quên mật khẩu được xử lý inline trong quenmatkhau.html
+// File này giữ lại để tương thích cấu trúc project
 
-  if (email) {
-    alert("Mã xác nhận đã được gửi tới email: " + email);
-    // TODO: gọi API backend để gửi mã xác nhận
-    // Ví dụ: fetch('/api/forgot-password', {method:'POST', body: JSON.stringify({email})})
-  } else {
-    alert("Vui lòng nhập email.");
-  }
-});
+// TODO: Khi có backend, thay thế logic demo bằng:
+// async function forgotPassword(email) {
+//   const res = await fetch('/api/forgot-password', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({ email })
+//   });
+//   const data = await res.json();
+//   if (data.success) {
+//     // Chuyển sang trang nhập mã xác nhận
+//     window.location.href = `xacnhan.html?email=${encodeURIComponent(email)}`;
+//   }
+// }
