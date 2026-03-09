@@ -1,117 +1,793 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quản lý kho sách - Library University</title>
+  <title>Quản lý kho sách — Library University</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue-700:  #1a56a4;
+      --blue-600:  #1d6cbf;
+      --blue-100:  #dbeafe;
+      --blue-50:   #eff6ff;
+      --red-600:   #dc2626;
+      --red-100:   #fee2e2;
+      --green-600: #16a34a;
+      --green-100: #dcfce7;
+      --amber-600: #d97706;
+      --amber-100: #fef3c7;
+      --gray-900:  #0f172a;
+      --gray-700:  #334155;
+      --gray-500:  #64748b;
+      --gray-300:  #cbd5e1;
+      --gray-200:  #e2e8f0;
+      --gray-100:  #f1f5f9;
+      --gray-50:   #f8fafc;
+      --white:     #ffffff;
+      --border:    #e2e8f0;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      background: var(--gray-50);
+      color: var(--gray-700);
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--blue-700); height: 44px; padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .brand-icon {
+      width:28px; height:28px; background:rgba(255,255,255,0.15);
+      border:1px solid rgba(255,255,255,0.25); border-radius:5px;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .brand-name { font-size:13px; font-weight:700; color:#fff; letter-spacing:1.2px; }
+    .topbar-right { display:flex; align-items:center; gap:6px; }
+    .topbar-right span { font-size:12px; color:rgba(255,255,255,0.65); }
+    .topbar-user {
+      display:flex; align-items:center; gap:7px;
+      background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+      border-radius:4px; padding:4px 12px;
+      font-size:12.5px; font-weight:600; color:#fff;
+      cursor:pointer; position:relative; transition:background 0.15s;
+    }
+    .topbar-user:hover { background:rgba(255,255,255,0.2); }
+    .user-dropdown {
+      display:none; position:absolute; right:0; top:calc(100% + 6px);
+      background:var(--white); border:1px solid var(--border); border-radius:6px;
+      min-width:180px; box-shadow:0 4px 16px rgba(0,0,0,0.10); z-index:200;
+    }
+    .topbar-user:hover .user-dropdown { display:block; }
+    .user-dropdown a {
+      display:block; padding:9px 16px; font-size:13px; color:var(--gray-700);
+      text-decoration:none; border-bottom:1px solid var(--gray-100); transition:background 0.1s;
+    }
+    .user-dropdown a:last-child { border-bottom:none; color:var(--red-600); }
+    .user-dropdown a:hover { background:var(--gray-50); }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background:var(--white); border-bottom:1px solid var(--border);
+      height:48px; padding:0 32px;
+      display:flex; align-items:center;
+      position:sticky; top:0; z-index:100;
+      box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    }
+    .nav-links { display:flex; align-items:center; }
+    .nav-links a {
+      font-size:13.5px; font-weight:500; color:var(--gray-500);
+      text-decoration:none; padding:0 18px; height:48px;
+      display:flex; align-items:center;
+      border-bottom:2px solid transparent;
+      transition:color 0.15s, border-color 0.15s; white-space:nowrap;
+    }
+    .nav-links a:hover { color:var(--blue-600); }
+    .nav-links a.active { color:var(--blue-700); font-weight:600; border-bottom-color:var(--blue-700); }
+
+    /* ── WELCOME BAR ── */
+    .welcome-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 32px;
+      text-align: center;
+    }
+    .welcome-bar .name { font-size:13.5px; font-weight:700; color:var(--red-600); }
+    .welcome-bar .sub  { font-size:12px; color:var(--gray-500); margin-top:1px; }
+
+    /* ── MAIN ── */
+    main { flex:1; padding:28px 32px; }
+
+    .page-head {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:20px;
+    }
+    .page-head-left { display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+    .page-title { font-size:22px; font-weight:700; color:var(--gray-900); letter-spacing:-0.2px; }
+    .update-time { font-size:12px; color:var(--gray-500); }
+
+    /* search bar inline with title */
+    .page-search { position:relative; }
+    .page-search svg {
+      position:absolute; left:11px; top:50%; transform:translateY(-50%);
+      color:var(--gray-500); pointer-events:none;
+    }
+    .page-search input {
+      width:340px; height:36px; padding:0 12px 0 36px;
+      border:1px solid var(--border); border-radius:5px;
+      font-size:13.5px; font-family:inherit; color:var(--gray-700);
+      background:var(--white); outline:none;
+      transition:border-color 0.15s, box-shadow 0.15s;
+    }
+    .page-search input:focus {
+      border-color:var(--blue-600); box-shadow:0 0 0 3px rgba(29,108,191,0.12);
+    }
+    .page-search input::placeholder { color:var(--gray-300); }
+
+    .btn-primary {
+      display:inline-flex; align-items:center; gap:6px;
+      height:36px; padding:0 16px;
+      background:var(--blue-700); color:#fff;
+      border:none; border-radius:5px;
+      font-size:13.5px; font-weight:600; font-family:inherit;
+      cursor:pointer; white-space:nowrap; transition:background 0.15s;
+    }
+    .btn-primary:hover { background:var(--blue-600); }
+
+    .btn-secondary {
+      display:inline-flex; align-items:center; gap:6px;
+      height:36px; padding:0 16px;
+      background:var(--white); color:var(--gray-700);
+      border:1px solid var(--border); border-radius:5px;
+      font-size:13.5px; font-weight:600; font-family:inherit;
+      cursor:pointer; white-space:nowrap; transition:background 0.15s;
+    }
+    .btn-secondary:hover { background:var(--gray-100); }
+
+    .toolbar {
+      display:flex; align-items:center; gap:10px; margin-bottom:16px;
+    }
+
+    /* ── BOOK LIST ── */
+    .book-card {
+      background:var(--white); border:1px solid var(--border);
+      border-radius:8px; overflow:hidden;
+    }
+    .book-card-head {
+      padding:14px 20px;
+      border-bottom:1px solid var(--border);
+      background:var(--gray-50);
+    }
+    .book-card-title {
+      font-size:13.5px; font-weight:700; color:var(--gray-900);
+    }
+    .book-card-sub { font-size:12px; color:var(--gray-500); margin-top:2px; }
+
+    .book-list { padding:8px 0; }
+    .book-item {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:11px 20px; border-bottom:1px solid var(--gray-100);
+      cursor:pointer; transition:background 0.12s;
+    }
+    .book-item:last-child { border-bottom:none; }
+    .book-item:hover { background:var(--blue-50); }
+    .book-item.selected { background:var(--blue-50); }
+
+    .book-item-left { display:flex; align-items:center; gap:12px; }
+    .book-star {
+      color:var(--gray-300); font-size:16px; cursor:pointer;
+      transition:color 0.15s; flex-shrink:0;
+    }
+    .book-star:hover, .book-star.starred { color:var(--amber-600); }
+    .book-item-name { font-size:13.5px; font-weight:500; color:var(--gray-900); }
+    .book-item-id   { font-size:12px; color:var(--gray-500); margin-top:2px; }
+
+    .book-item-right {
+      display:flex; align-items:center; gap:8px; flex-shrink:0;
+    }
+    .arrow-icon { color:var(--gray-300); font-size:16px; }
+
+    /* pagination */
+    .pagination {
+      display:flex; align-items:center; gap:4px;
+      padding:12px 20px; border-top:1px solid var(--border);
+      font-size:13px;
+    }
+    .page-btn {
+      min-width:32px; height:32px; padding:0 8px;
+      border:1px solid var(--border); border-radius:4px;
+      background:var(--white); color:var(--gray-700);
+      font-size:13px; font-family:inherit; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:all 0.12s;
+    }
+    .page-btn:hover { background:var(--gray-100); }
+    .page-btn.active { background:var(--blue-700); color:#fff; border-color:var(--blue-700); }
+    .page-btn:disabled { opacity:0.4; cursor:not-allowed; }
+    .page-dots { color:var(--gray-400); padding:0 4px; }
+
+    /* ── SIDE PANEL (edit form) ── */
+    .side-panel {
+      display:none; position:fixed; right:0; top:92px; bottom:40px;
+      width:340px; background:var(--white);
+      border-left:1px solid var(--border);
+      border-top:1px solid var(--border);
+      box-shadow:-4px 0 20px rgba(0,0,0,0.08);
+      z-index:150; overflow-y:auto;
+      animation:slideIn 0.2s ease;
+    }
+    .side-panel.show { display:flex; flex-direction:column; }
+    @keyframes slideIn { from{transform:translateX(20px);opacity:0} to{transform:translateX(0);opacity:1} }
+
+    .panel-head {
+      padding:16px 20px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; background:var(--white); z-index:1;
+    }
+    .panel-title { font-size:14px; font-weight:700; color:var(--gray-900); }
+    .panel-x {
+      width:28px; height:28px; border:none; background:var(--gray-100);
+      border-radius:4px; cursor:pointer; font-size:16px;
+      color:var(--gray-500); display:flex; align-items:center; justify-content:center;
+      transition:all 0.12s;
+    }
+    .panel-x:hover { background:var(--red-100); color:var(--red-600); }
+
+    .panel-body { padding:20px; flex:1; }
+
+    .field { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+    .field label { font-size:12.5px; font-weight:600; color:var(--gray-700); }
+    .field input, .field select, .field textarea {
+      padding:8px 11px; border:1px solid var(--border); border-radius:5px;
+      font-size:13.5px; font-family:inherit; color:var(--gray-700);
+      background:var(--white); outline:none;
+      transition:border-color 0.15s, box-shadow 0.15s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color:var(--blue-600); box-shadow:0 0 0 3px rgba(29,108,191,0.12);
+    }
+    .field input::placeholder { color:var(--gray-300); font-size:13px; }
+    .field input[type="number"] { -moz-appearance:textfield; }
+
+    .panel-foot {
+      padding:14px 20px; border-top:1px solid var(--border);
+      display:flex; gap:8px; flex-wrap:wrap;
+      position:sticky; bottom:0; background:var(--white);
+    }
+    .btn-save {
+      flex:1; height:34px;
+      background:var(--blue-700); color:#fff;
+      border:none; border-radius:5px;
+      font-size:13.5px; font-weight:600; font-family:inherit;
+      cursor:pointer; transition:background 0.12s;
+    }
+    .btn-save:hover { background:var(--blue-600); }
+    .btn-del-sm {
+      height:34px; padding:0 14px;
+      background:var(--white); color:var(--red-600);
+      border:1px solid var(--red-100); border-radius:5px;
+      font-size:13.5px; font-weight:600; font-family:inherit;
+      cursor:pointer; transition:all 0.12s;
+    }
+    .btn-del-sm:hover { background:var(--red-100); border-color:var(--red-600); }
+
+    /* inline alert */
+    .inline-msg {
+      display:none; padding:9px 14px; border-radius:5px;
+      font-size:13px; font-weight:500; margin-bottom:14px;
+      border-left:3px solid; align-items:center; justify-content:space-between;
+    }
+    .inline-msg.show { display:flex; }
+    .inline-msg.success { background:#f0fdf4; border-color:var(--green-600); color:#166534; }
+    .inline-msg.error   { background:#fef2f2; border-color:var(--red-600);   color:#991b1b; }
+    .inline-msg button { background:none; border:none; cursor:pointer; font-size:15px; opacity:0.5; }
+    .inline-msg button:hover { opacity:1; }
+
+    /* ── DELETE MODAL ── */
+    .overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(15,23,42,0.5); z-index:300;
+      align-items:center; justify-content:center; padding:16px;
+    }
+    .overlay.show { display:flex; }
+    .modal {
+      background:var(--white); border-radius:8px; width:100%; max-width:420px;
+      border:1px solid var(--border);
+      box-shadow:0 8px 32px rgba(0,0,0,0.16);
+      animation:modalIn 0.2s ease;
+    }
+    @keyframes modalIn { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+    .modal-head {
+      padding:18px 24px 16px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .modal-title { font-size:15px; font-weight:700; color:var(--gray-900); }
+    .modal-x {
+      width:28px; height:28px; border:none; background:var(--gray-100);
+      border-radius:4px; cursor:pointer; font-size:16px;
+      color:var(--gray-500); display:flex; align-items:center; justify-content:center;
+      transition:all 0.12s;
+    }
+    .modal-x:hover { background:var(--red-100); color:var(--red-600); }
+    .modal-body { padding:20px 24px; text-align:center; }
+    .del-desc  { font-size:13.5px; color:var(--gray-500); line-height:1.6; }
+    .del-target {
+      display:inline-block; margin-top:10px; padding:4px 14px;
+      background:var(--gray-100); border-radius:4px;
+      font-size:13px; font-weight:600; color:var(--gray-700);
+    }
+    .modal-foot {
+      padding:14px 24px; border-top:1px solid var(--border);
+      display:flex; justify-content:flex-end; gap:8px;
+    }
+    .btn-cancel {
+      height:34px; padding:0 16px;
+      background:var(--white); border:1px solid var(--border);
+      border-radius:5px; font-size:13.5px; font-weight:500;
+      font-family:inherit; color:var(--gray-700); cursor:pointer;
+      transition:background 0.12s;
+    }
+    .btn-cancel:hover { background:var(--gray-100); }
+    .btn-delete {
+      height:34px; padding:0 18px;
+      background:var(--red-600); color:#fff;
+      border:none; border-radius:5px;
+      font-size:13.5px; font-weight:600; font-family:inherit;
+      cursor:pointer; transition:background 0.12s;
+    }
+    .btn-delete:hover { background:#b91c1c; }
+
+    /* ── TOAST ── */
+    .toast {
+      position:fixed; top:72px; right:24px;
+      min-width:280px; max-width:360px;
+      background:var(--white); border:1px solid var(--border); border-radius:6px;
+      padding:12px 16px; display:flex; align-items:center; gap:10px;
+      font-size:13.5px; font-weight:500;
+      box-shadow:0 4px 16px rgba(0,0,0,0.10);
+      z-index:9999; pointer-events:none;
+      opacity:0; transform:translateY(-8px); transition:all 0.22s ease;
+    }
+    .toast.show { opacity:1; transform:translateY(0); pointer-events:all; }
+    .toast-bar { width:4px; height:36px; border-radius:2px; flex-shrink:0; }
+    .toast.success .toast-bar { background:var(--green-600); }
+    .toast.success .toast-detail { color:var(--green-600); }
+    .toast.error   .toast-bar { background:var(--red-600); }
+    .toast-content { flex:1; }
+    .toast-title  { font-weight:600; color:var(--gray-900); font-size:13.5px; }
+    .toast-detail { font-size:12px; color:var(--gray-500); margin-top:2px; }
+    .toast-close  { cursor:pointer; color:var(--gray-300); font-size:16px; }
+    .toast-close:hover { color:var(--gray-700); }
+
+    /* ── FOOTER ── */
+    .footer-bar {
+      background:var(--gray-900); color:rgba(255,255,255,0.55);
+      padding:0 32px; font-size:12px;
+      display:flex; flex-wrap:wrap; align-items:stretch;
+    }
+    .footer-col {
+      padding:18px 32px 18px 0;
+      border-right:1px solid rgba(255,255,255,0.08);
+      margin-right:32px;
+    }
+    .footer-col:last-child { border-right:none; margin-right:0; }
+    .footer-col h4 {
+      font-size:11px; font-weight:700; color:rgba(255,255,255,0.4);
+      text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px;
+    }
+    .footer-col p  { line-height:1.9; color:rgba(255,255,255,0.6); }
+    .footer-col a  { color:rgba(255,255,255,0.5); text-decoration:none; }
+  </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-left">LIBRARY UNIVERSITY</div>
-    <ul class="nav-menu">
-      <li><a href="thongtin.html">Thông tin chung</a></li>
-      <li><a href="quanlysach.html" class="active">Quản lý kho</a></li>
-      <li><a href="muonsach.html">Quản lý mượn sách</a></li>
-      <li><a href="trasach.html">Quản lý trả sách</a></li>
-      <li class="dropdown">
-        <a href="#">Thủ thư ▼</a>
-        <ul class="dropdown-menu">
-          <li><a href="taikhoan.html">Quản lý tài khoản</a></li>
-          <li><a href="dangxuat.html">Đăng xuất</a></li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
 
-  <!-- Nội dung chính -->
-  <main class="book-management">
-    <h1>QUẢN LÝ KHO SÁCH</h1>
-    <p class="update-time">Cập nhật gần nhất: 20h30p 03/05/2026</p>
-
-    <button class="btn-primary" id="addBook">THÊM SÁCH MỚI</button>
-
-    <table class="book-table">
-      <thead>
-        <tr>
-          <th>Tên sách</th>
-          <th>Mã số</th>
-          <th>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody id="bookList">
-        <tr>
-          <td>Giáo trình Cơ sở dữ liệu</td>
-          <td>012346</td>
-          <td>
-            <button class="btn-edit">Sửa</button>
-            <button class="btn-delete">Xóa</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Giáo trình Phân tích & Thiết kế HTTT</td>
-          <td>012345</td>
-          <td>
-            <button class="btn-edit">Sửa</button>
-            <button class="btn-delete">Xóa</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Form thêm/sửa sách -->
-    <div id="bookForm" class="modal hidden">
-      <div class="modal-content">
-        <h2 id="formTitle">Thêm/Sửa sách</h2>
-        <label>Tiêu đề cuốn sách</label>
-        <input type="text" id="bookTitle" />
-
-        <label>Ngày xuất bản</label>
-        <input type="date" id="bookDate" />
-
-        <label>Thể loại</label>
-        <input type="text" id="bookCategory" />
-
-        <label>Tác giả</label>
-        <input type="text" id="bookAuthor" />
-
-        <label>Số lượng sách trong kho</label>
-        <input type="number" id="bookQuantity" />
-
-        <div class="form-actions">
-          <button class="btn-primary" id="saveBook">Lưu thay đổi</button>
-          <button class="btn-delete" id="deleteBook">Xóa</button>
-          <button class="btn-secondary" id="closeForm">Đóng</button>
-        </div>
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-brand" href="#">
+    <div class="brand-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+    </div>
+    <span class="brand-name">LIBRARY UNIVERSITY</span>
+  </a>
+  <div class="topbar-right">
+    <span>Hệ thống quản lý thư viện</span>
+    <div class="topbar-user">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Thủ thư
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <div class="user-dropdown">
+        <a href="taikhoan.html">Quản lý tài khoản</a>
+        <a href="dangnhap.html">Đăng xuất</a>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Thông báo -->
-    <div id="notification" class="notification hidden"></div>
-  </main>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-links">
+    <a href="taikhoan.html">Quản lý tài khoản</a>
+    <a href="quanlysach.html" class="active">Quản lý sách</a>
+    <a href="muonsach.html">Quản lý mượn sách</a>
+    <a href="trasach.html">Trả sách</a>
+    <a href="baocao.html">Báo cáo thống kê</a>
+  </div>
+</nav>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-section">
-      <h3>LIÊN HỆ</h3>
-      <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội, Việt Nam</p>
-      <p>Điện thoại: (84)24.12.345.678</p>
-      <p>Email: libuniversity@gmail.com</p>
-    </div>
-    <div class="footer-section">
-      <h3>THỜI GIAN HOẠT ĐỘNG</h3>
-      <p>Thứ 2 - Thứ 6: 8:00 - 21:00</p>
-      <p>Thứ 7: 9:00 - 17:00</p>
-      <p>Chủ nhật: Đóng cửa</p>
-    </div>
-    <div class="footer-section">
-      <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
-      <p>[QR] [Facebook] [YouTube]</p>
-    </div>
-  </footer>
+<!-- WELCOME -->
+<div class="welcome-bar">
+  <div class="name">CHÀO BẠN ABC!</div>
+  <div class="sub">Giá sách của bạn tại đây</div>
+</div>
 
-  <script src="assets/js/books.js"></script>
+<!-- MAIN -->
+<main>
+  <div class="page-head">
+    <div class="page-head-left">
+      <div class="page-title">QUẢN LÝ KHO SÁCH</div>
+    </div>
+    <div class="page-search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Tìm kiếm sách..." />
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn-primary" id="btnAdd">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Thêm sách mới
+    </button>
+    <button class="btn-secondary" id="btnBorrowReturn" style="display:none;">
+      Mượn sách / Trả sách
+    </button>
+  </div>
+
+  <div class="book-card">
+    <div class="book-card-head">
+      <div class="book-card-title">DANH MỤC QUẢN LÝ
+        <span id="updateTime" style="font-weight:400;color:var(--gray-500);font-size:12px;margin-left:8px;"></span>
+      </div>
+    </div>
+    <div class="book-list" id="bookList"></div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</main>
+
+<!-- SIDE PANEL: THÊM / SỬA -->
+<div class="side-panel" id="sidePanel">
+  <div class="panel-head">
+    <div class="panel-title" id="panelTitle">Thêm sách mới</div>
+    <button class="panel-x" id="closePanel">&#x2715;</button>
+  </div>
+  <div class="panel-body">
+    <div class="inline-msg" id="panelAlert">
+      <span id="panelAlertMsg"></span>
+      <button onclick="closeAlert()">&#x2715;</button>
+    </div>
+    <div class="field">
+      <label>Tiêu đề cuốn sách</label>
+      <input type="text" id="fTitle" placeholder="Nhập tên sách..." />
+    </div>
+    <div class="field">
+      <label>Ngày/Tháng/Năm xuất bản</label>
+      <input type="date" id="fDate" />
+    </div>
+    <div class="field">
+      <label>Thể loại</label>
+      <select id="fCategory">
+        <option value="Giáo trình">Giáo trình</option>
+        <option value="Bài tập">Bài tập</option>
+        <option value="Tài liệu tham khảo">Tài liệu tham khảo</option>
+        <option value="Khác">Khác</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Tác giả xuất bản</label>
+      <input type="text" id="fAuthor" placeholder="VD: TS. Hàn Minh Phương" />
+    </div>
+    <div class="field">
+      <label>Số lượng sách có trong kho</label>
+      <input type="number" id="fQty" placeholder="30" min="0" />
+    </div>
+  </div>
+  <div class="panel-foot">
+    <button class="btn-save" id="btnSave">Lưu thay đổi</button>
+    <button class="btn-del-sm" id="btnDelFromPanel" style="display:none;">Xóa</button>
+  </div>
+</div>
+
+<!-- MODAL: XÁC NHẬN XÓA -->
+<div class="overlay" id="overlayDelete">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Xác nhận xóa sách</div>
+      <button class="modal-x" id="closeDelete">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <p class="del-desc">Bạn có chắc chắn muốn xóa cuốn sách này không? Thao tác này không thể hoàn tác.</p>
+      <span class="del-target" id="deleteTarget"></span>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" id="cancelDelete">Hủy</button>
+      <button class="btn-delete" id="confirmDelete">Xóa ngay</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="gToast">
+  <div class="toast-bar"></div>
+  <div class="toast-content">
+    <div class="toast-title" id="gToastTitle"></div>
+    <div class="toast-detail" id="gToastDetail"></div>
+  </div>
+  <span class="toast-close" onclick="hideToast()">&#x2715;</span>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-bar">
+  <div class="footer-col">
+    <h4>Liên hệ</h4>
+    <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội, Việt Nam</p>
+    <p>Điện thoại: (84)24.12.345.678</p>
+    <p>Email: libuniversity@gmail.com</p>
+  </div>
+  <div class="footer-col">
+    <h4>Thời gian hoạt động</h4>
+    <p>Thứ 2 – Thứ 6: 8:00 – 21:00</p>
+    <p>Thứ 7: 9:00 – 17:00</p>
+    <p>Chủ nhật: Đóng cửa</p>
+  </div>
+  <div class="footer-col">
+    <h4>Kết nối với chúng tôi</h4>
+    <p><a href="#">Facebook</a> &nbsp;|&nbsp; <a href="#">YouTube</a></p>
+  </div>
+</footer>
+
+<script src="assets/js/books.js"></script>
+<script>
+  // ── DỮ LIỆU MẪU ──
+  let books = [
+    {id:'012345', title:'Giáo trình Phân tích và Thiết kế hệ thống thông tin', date:'2024-01-15', category:'Giáo trình', author:'TS. Nguyễn Văn A', qty:40, starred:true},
+    {id:'012346', title:'Giáo trình Cơ sở dữ liệu',                           date:'2025-03-06', category:'Giáo trình', author:'TS. Hàn Minh Phương', qty:30, starred:true},
+    {id:'198767', title:'Sách tham khảo Nghiên cứu khoa học Thương mại điện tử',date:'2023-08-20',category:'Tài liệu tham khảo',author:'PGS. Lê Thị B', qty:20, starred:false},
+    {id:'234156', title:'Tài liệu ôn IELTS Cambrigde',                         date:'2024-06-01', category:'Tài liệu tham khảo', author:'Cambridge', qty:50, starred:false},
+    {id:'012348', title:'Giáo trình Quản trị thương mại điện tử',              date:'2024-09-10', category:'Giáo trình', author:'TS. Trần Văn C', qty:35, starred:false},
+    {id:'245678', title:'Sách bài tập Nguyên lý kế toán (Bản 1)',              date:'2023-12-01', category:'Bài tập', author:'ThS. Phạm Thị D', qty:45, starred:false},
+    {id:'301234', title:'Giáo trình Lịch sử Đảng Cộng sản Việt Nam',          date:'2024-02-28', category:'Giáo trình', author:'Bộ GD&ĐT', qty:60, starred:false},
+    {id:'401234', title:'Bài tập Kinh tế lượng',                               date:'2024-05-15', category:'Bài tập', author:'TS. Hoàng Văn E', qty:38, starred:false},
+    {id:'501234', title:'Giáo trình Kinh tế vi mô',                            date:'2023-11-20', category:'Giáo trình', author:'GS. Nguyễn Thị F', qty:55, starred:false},
+    {id:'601234', title:'Tài liệu tham khảo Luật Thương mại',                  date:'2024-07-10', category:'Tài liệu tham khảo', author:'TS. Lê Văn G', qty:25, starred:false},
+  ];
+
+  const PAGE_SIZE = 6;
+  let currentPage = 1;
+  let filteredBooks = [...books];
+  let editingId = null;
+  let deletingId = null;
+
+  // ── THỜI GIAN ──
+  function setUpdateTime() {
+    const now = new Date();
+    const h = now.getHours().toString().padStart(2,'0');
+    const m = now.getMinutes().toString().padStart(2,'0');
+    const d = now.getDate().toString().padStart(2,'0');
+    const mo = (now.getMonth()+1).toString().padStart(2,'0');
+    const y = now.getFullYear();
+    document.getElementById('updateTime').textContent = `(Cập nhật gần nhất hôm nay: ${h}h${m}p ${d}/${mo}/${y})`;
+  }
+
+  // ── RENDER LIST ──
+  function renderBooks() {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const page  = filteredBooks.slice(start, start + PAGE_SIZE);
+    const list  = document.getElementById('bookList');
+
+    if (!page.length) {
+      list.innerHTML = `<div style="padding:32px;text-align:center;color:#94a3b8;font-size:13.5px;">Không tìm thấy sách phù hợp</div>`;
+      document.getElementById('pagination').innerHTML = '';
+      return;
+    }
+
+    list.innerHTML = page.map(b => `
+      <div class="book-item ${editingId === b.id ? 'selected' : ''}" onclick="openEdit('${b.id}')">
+        <div class="book-item-left">
+          <span class="book-star ${b.starred ? 'starred' : ''}"
+            onclick="event.stopPropagation(); toggleStar('${b.id}')">&#9733;</span>
+          <div>
+            <div class="book-item-name">${b.title}</div>
+            <div class="book-item-id">${b.id}</div>
+          </div>
+        </div>
+        <div class="book-item-right">
+          <span class="arrow-icon">&#8250;</span>
+        </div>
+      </div>`).join('');
+
+    renderPagination();
+  }
+
+  // ── PAGINATION ──
+  function renderPagination() {
+    const total = Math.ceil(filteredBooks.length / PAGE_SIZE);
+    if (total <= 1) { document.getElementById('pagination').innerHTML = ''; return; }
+
+    let html = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>&#8249; Trang trước</button>`;
+
+    for (let i = 1; i <= total; i++) {
+      if (i === 1 || i === total || Math.abs(i - currentPage) <= 1) {
+        html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+      } else if (Math.abs(i - currentPage) === 2) {
+        html += `<span class="page-dots">...</span>`;
+      }
+    }
+
+    html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===total?'disabled':''}>Trang sau &#8250;</button>`;
+    document.getElementById('pagination').innerHTML = html;
+  }
+
+  function goPage(p) {
+    const total = Math.ceil(filteredBooks.length / PAGE_SIZE);
+    if (p < 1 || p > total) return;
+    currentPage = p;
+    renderBooks();
+  }
+
+  // ── SEARCH ──
+  document.getElementById('searchInput').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    filteredBooks = books.filter(b =>
+      b.title.toLowerCase().includes(q) || b.id.includes(q) || b.author.toLowerCase().includes(q)
+    );
+    currentPage = 1;
+    renderBooks();
+  });
+
+  // ── STAR ──
+  function toggleStar(id) {
+    const b = books.find(x => x.id === id);
+    if (b) { b.starred = !b.starred; filteredBooks = [...books]; renderBooks(); }
+  }
+
+  // ── MỞ THÊM MỚI ──
+  document.getElementById('btnAdd').addEventListener('click', () => {
+    editingId = null;
+    document.getElementById('panelTitle').textContent = 'Thêm sách mới';
+    document.getElementById('btnSave').textContent = 'Thêm sách';
+    document.getElementById('btnDelFromPanel').style.display = 'none';
+    ['fTitle','fDate','fAuthor'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('fCategory').value = 'Giáo trình';
+    document.getElementById('fQty').value = '';
+    document.getElementById('btnBorrowReturn').style.display = 'none';
+    closeAlert();
+    document.getElementById('sidePanel').classList.add('show');
+  });
+
+  // ── MỞ SỬA ──
+  function openEdit(id) {
+    const b = books.find(x => x.id === id); if (!b) return;
+    editingId = id;
+    document.getElementById('panelTitle').textContent = 'Chỉnh sửa thông tin sách';
+    document.getElementById('btnSave').textContent = 'Lưu thay đổi';
+    document.getElementById('btnDelFromPanel').style.display = 'inline-flex';
+    document.getElementById('fTitle').value    = b.title;
+    document.getElementById('fDate').value     = b.date;
+    document.getElementById('fCategory').value = b.category;
+    document.getElementById('fAuthor').value   = b.author;
+    document.getElementById('fQty').value      = b.qty;
+    document.getElementById('btnBorrowReturn').style.display = 'inline-flex';
+    closeAlert();
+    renderBooks();
+    document.getElementById('sidePanel').classList.add('show');
+  }
+
+  // ── LƯU ──
+  document.getElementById('btnSave').addEventListener('click', () => {
+    const title  = document.getElementById('fTitle').value.trim();
+    const date   = document.getElementById('fDate').value;
+    const cat    = document.getElementById('fCategory').value;
+    const author = document.getElementById('fAuthor').value.trim();
+    const qty    = parseInt(document.getElementById('fQty').value);
+
+    if (!title || !author || isNaN(qty)) {
+      showAlert('Vui lòng điền đầy đủ thông tin bắt buộc.', 'error'); return;
+    }
+
+    if (editingId) {
+      const idx = books.findIndex(b => b.id === editingId);
+      books[idx] = { ...books[idx], title, date, category:cat, author, qty };
+      filteredBooks = [...books];
+      showAlert('Đã lưu thông tin sách.', 'success');
+      setTimeout(() => {
+        document.getElementById('sidePanel').classList.remove('show');
+        editingId = null;
+        renderBooks();
+        showToast('Đã lưu thông tin', `Chỉnh sửa tại: ${title} – ${books.find((_,i)=>i===books.findIndex(b=>b.title===title))?.id||''}`, 'success');
+      }, 900);
+    } else {
+      const newId = String(Math.floor(100000 + Math.random() * 900000));
+      books.unshift({ id:newId, title, date, category:cat, author, qty, starred:false });
+      filteredBooks = [...books];
+      showAlert('Thêm sách thành công.', 'success');
+      setTimeout(() => {
+        document.getElementById('sidePanel').classList.remove('show');
+        editingId = null; currentPage = 1;
+        renderBooks();
+        showToast('Thêm sách thành công', title, 'success');
+      }, 900);
+    }
+  });
+
+  // ── XÓA ──
+  document.getElementById('btnDelFromPanel').addEventListener('click', () => {
+    const b = books.find(x => x.id === editingId);
+    if (!b) return;
+    deletingId = editingId;
+    document.getElementById('deleteTarget').textContent = `${b.title} – ${b.id}`;
+    document.getElementById('overlayDelete').classList.add('show');
+  });
+
+  document.getElementById('confirmDelete').addEventListener('click', () => {
+    const b = books.find(x => x.id === deletingId);
+    books = books.filter(x => x.id !== deletingId);
+    filteredBooks = [...books];
+    document.getElementById('overlayDelete').classList.remove('show');
+    document.getElementById('sidePanel').classList.remove('show');
+    editingId = null; deletingId = null;
+    renderBooks();
+    showToast('Đã xóa sách', b?.title || '', 'success');
+  });
+
+  // ── ĐÓNG ──
+  document.getElementById('closePanel').addEventListener('click', () => {
+    document.getElementById('sidePanel').classList.remove('show');
+    editingId = null; renderBooks();
+  });
+  ['closeDelete','cancelDelete'].forEach(id =>
+    document.getElementById(id).addEventListener('click', () =>
+      document.getElementById('overlayDelete').classList.remove('show'))
+  );
+  document.getElementById('overlayDelete').addEventListener('click', e => {
+    if (e.target === e.currentTarget) e.currentTarget.classList.remove('show');
+  });
+
+  // Nút Mượn / Trả sách
+  document.getElementById('btnBorrowReturn').addEventListener('click', () => {
+    window.location.href = 'muonsach.html';
+  });
+
+  // ── ALERT ──
+  function showAlert(msg, type='success') {
+    document.getElementById('panelAlertMsg').textContent = msg;
+    document.getElementById('panelAlert').className = `inline-msg show ${type}`;
+  }
+  function closeAlert() { document.getElementById('panelAlert').className = 'inline-msg'; }
+
+  // ── TOAST ──
+  let toastTimer;
+  function showToast(title, detail, type='success') {
+    clearTimeout(toastTimer);
+    document.getElementById('gToastTitle').textContent  = title;
+    document.getElementById('gToastDetail').textContent = detail;
+    document.getElementById('gToast').className = `toast ${type} show`;
+    toastTimer = setTimeout(hideToast, 4000);
+  }
+  function hideToast() { document.getElementById('gToast').className = 'toast'; }
+
+  // ── INIT ──
+  setUpdateTime();
+  renderBooks();
+</script>
 </body>
 </html>
