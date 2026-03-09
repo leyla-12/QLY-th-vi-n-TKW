@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -24,10 +23,18 @@
   <main class="borrow-management">
     <h1>QUẢN LÝ MƯỢN SÁCH</h1>
 
+    <!-- Kiểm tra mã độc giả -->
+    <section class="check-reader">
+      <label>Mã độc giả</label>
+      <input type="text" id="readerId" placeholder="Nhập mã độc giả..." />
+      <button class="btn-primary" id="checkReader">Kiểm tra</button>
+      <div id="notification" class="hidden"></div>
+    </section>
+
     <!-- Danh sách phiếu mượn -->
     <section class="borrow-list">
       <h2>Danh sách phiếu mượn</h2>
-      <button class="btn-primary" id="newSlip">TẠO PHIẾU MƯỢN MỚI</button>
+      <button class="btn-primary" id="newSlip" disabled>TẠO PHIẾU MƯỢN MỚI</button>
       <table class="borrow-table">
         <thead>
           <tr>
@@ -44,16 +51,6 @@
             <td>Lê Thanh Ngân</td>
             <td>leengan.k5@gmail.com</td>
             <td>Chưa trả</td>
-            <td>
-              <button class="btn-edit">Sửa</button>
-              <button class="btn-delete">Xóa</button>
-            </td>
-          </tr>
-          <tr>
-            <td>PM0098</td>
-            <td>Lê Thị Tuyết Nhi</td>
-            <td>tuyetnhi@gmail.com</td>
-            <td>Đã trả</td>
             <td>
               <button class="btn-edit">Sửa</button>
               <button class="btn-delete">Xóa</button>
@@ -93,9 +90,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Thông báo -->
-    <div id="notification" class="notification hidden"></div>
   </main>
 
   <!-- Footer -->
