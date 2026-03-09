@@ -1,1 +1,76 @@
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thông tin chung - Library University</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Thanh điều hướng -->
+  <nav class="navbar">
+    <div class="nav-left">LIBRARY UNIVERSITY</div>
+    <ul class="nav-menu">
+      <li><a href="thongtin.html" class="active">Thông tin chung</a></li>
+      <li><a href="kho.html">Quản lý kho</a></li>
+      <li><a href="muonsach.html">Quản lý mượn sách</a></li>
+      <li><a href="trasach.html">Quản lý trả sách</a></li>
+      <li class="dropdown">
+        <a href="#">Thủ thư ▼</a>
+        <ul class="dropdown-menu">
+          <li><a href="taikhoan.html">Quản lý tài khoản</a></li>
+          <li><a href="dangxuat.html">Đăng xuất</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Nội dung chính -->
+  <main class="dashboard">
+    <h1>TRANG CHỦ</h1>
+    <div class="stats">
+      <div class="card red">
+        <h2>SÁCH TỒN KHO</h2>
+        <p id="tonkho">50</p>
+      </div>
+      <div class="card blue">
+        <h2>PHIẾU ĐANG MƯỢN</h2>
+        <p id="phieu">85</p>
+      </div>
+      <div class="card green">
+        <h2>SÁCH TRONG KHO</h2>
+        <p id="trongkho">896</p>
+      </div>
+      <div class="card orange">
+        <h2>ĐỘC GIẢ MỚI</h2>
+        <p id="docgia">150</p>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="quickSlip">LẬP PHIẾU NHANH</button>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-section">
+      <h3>LIÊN HỆ</h3>
+      <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội, Việt Nam</p>
+      <p>Điện thoại: (84)24.12.345.678</p>
+      <p>Email: libuniversity@gmail.com</p>
+    </div>
+    <div class="footer-section">
+      <h3>THỜI GIAN HOẠT ĐỘNG</h3>
+      <p>Thứ 2 - Thứ 6: 8:00 - 21:00</p>
+      <p>Thứ 7: 9:00 - 17:00</p>
+      <p>Chủ nhật: Đóng cửa</p>
+    </div>
+    <div class="footer-section">
+      <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
+      <p>[QR] [Facebook] [YouTube]</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
