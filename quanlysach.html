@@ -1,1 +1,117 @@
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quản lý kho sách - Library University</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">LIBRARY UNIVERSITY</div>
+    <ul class="nav-menu">
+      <li><a href="thongtin.html">Thông tin chung</a></li>
+      <li><a href="quanlysach.html" class="active">Quản lý kho</a></li>
+      <li><a href="muonsach.html">Quản lý mượn sách</a></li>
+      <li><a href="trasach.html">Quản lý trả sách</a></li>
+      <li class="dropdown">
+        <a href="#">Thủ thư ▼</a>
+        <ul class="dropdown-menu">
+          <li><a href="taikhoan.html">Quản lý tài khoản</a></li>
+          <li><a href="dangxuat.html">Đăng xuất</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Nội dung chính -->
+  <main class="book-management">
+    <h1>QUẢN LÝ KHO SÁCH</h1>
+    <p class="update-time">Cập nhật gần nhất: 20h30p 03/05/2026</p>
+
+    <button class="btn-primary" id="addBook">THÊM SÁCH MỚI</button>
+
+    <table class="book-table">
+      <thead>
+        <tr>
+          <th>Tên sách</th>
+          <th>Mã số</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody id="bookList">
+        <tr>
+          <td>Giáo trình Cơ sở dữ liệu</td>
+          <td>012346</td>
+          <td>
+            <button class="btn-edit">Sửa</button>
+            <button class="btn-delete">Xóa</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Giáo trình Phân tích & Thiết kế HTTT</td>
+          <td>012345</td>
+          <td>
+            <button class="btn-edit">Sửa</button>
+            <button class="btn-delete">Xóa</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Form thêm/sửa sách -->
+    <div id="bookForm" class="modal hidden">
+      <div class="modal-content">
+        <h2 id="formTitle">Thêm/Sửa sách</h2>
+        <label>Tiêu đề cuốn sách</label>
+        <input type="text" id="bookTitle" />
+
+        <label>Ngày xuất bản</label>
+        <input type="date" id="bookDate" />
+
+        <label>Thể loại</label>
+        <input type="text" id="bookCategory" />
+
+        <label>Tác giả</label>
+        <input type="text" id="bookAuthor" />
+
+        <label>Số lượng sách trong kho</label>
+        <input type="number" id="bookQuantity" />
+
+        <div class="form-actions">
+          <button class="btn-primary" id="saveBook">Lưu thay đổi</button>
+          <button class="btn-delete" id="deleteBook">Xóa</button>
+          <button class="btn-secondary" id="closeForm">Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thông báo -->
+    <div id="notification" class="notification hidden"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-section">
+      <h3>LIÊN HỆ</h3>
+      <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội, Việt Nam</p>
+      <p>Điện thoại: (84)24.12.345.678</p>
+      <p>Email: libuniversity@gmail.com</p>
+    </div>
+    <div class="footer-section">
+      <h3>THỜI GIAN HOẠT ĐỘNG</h3>
+      <p>Thứ 2 - Thứ 6: 8:00 - 21:00</p>
+      <p>Thứ 7: 9:00 - 17:00</p>
+      <p>Chủ nhật: Đóng cửa</p>
+    </div>
+    <div class="footer-section">
+      <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
+      <p>[QR] [Facebook] [YouTube]</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/books.js"></script>
+</body>
+</html>
