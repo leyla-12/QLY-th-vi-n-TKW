@@ -292,3 +292,27 @@ footer {
 }
 .notification.hidden { display: none; }
 
+/* Báo cáo thống kê */
+.report {
+  padding: 20px;
+}
+
+.chart-section {
+  margin-bottom: 30px;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.report-table th, .report-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.report-table th {
+  background: #004080;
+  color: #fff;
+}
