@@ -1,1 +1,82 @@
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quản lý trả sách - Library University</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">LIBRARY UNIVERSITY</div>
+    <ul class="nav-menu">
+      <li><a href="thongtin.html">Thông tin chung</a></li>
+      <li><a href="quanlysach.html">Quản lý kho</a></li>
+      <li><a href="muonsach.html">Quản lý mượn sách</a></li>
+      <li><a href="trasach.html" class="active">Quản lý trả sách</a></li>
+      <li><a href="baocao.html">Báo cáo thống kê</a></li>
+    </ul>
+  </nav>
+
+  <!-- Nội dung chính -->
+  <main class="return-management">
+    <h1>QUẢN LÝ TRẢ SÁCH</h1>
+
+    <!-- Kiểm tra độc giả -->
+    <section class="check-reader">
+      <label>Email độc giả</label>
+      <input type="email" id="readerEmail" placeholder="Nhập email độc giả..." />
+      <button class="btn-primary" id="checkReturn">Kiểm tra</button>
+      <div id="notification" class="hidden"></div>
+    </section>
+
+    <!-- Phiếu mượn -->
+    <section id="borrowSlip" class="hidden">
+      <h2>PHIẾU MƯỢN SÁCH</h2>
+      <p><strong>Độc giả:</strong> <span id="readerName"></span></p>
+      <p><strong>Mã:</strong> <span id="readerId"></span></p>
+      <p><strong>Trạng thái:</strong> <span id="status"></span></p>
+      <p><strong>Thời gian mượn:</strong> <span id="borrowPeriod"></span></p>
+      <ul id="borrowBooks"></ul>
+      <button class="btn-primary" id="createFine">TẠO PHIẾU PHẠT</button>
+    </section>
+
+    <!-- Phiếu phạt -->
+    <section id="fineSlip" class="hidden">
+      <h2>PHIẾU PHẠT TRẢ SÁCH</h2>
+      <p><strong>Độc giả:</strong> <span id="fineReader"></span></p>
+      <p><strong>Trạng thái:</strong> Quá hạn</p>
+      <p><strong>Tổng tiền phạt:</strong> <span id="fineTotal"></span> VND</p>
+      <ul id="fineDetails"></ul>
+      <div class="form-actions">
+        <button class="btn-primary">GỬI</button>
+        <button class="btn-secondary">RESET</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-section">
+      <h3>LIÊN HỆ</h3>
+      <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội, Việt Nam</p>
+      <p>Điện thoại: (84)24.12.345.678</p>
+      <p>Email: libuniversity@gmail.com</p>
+    </div>
+    <div class="footer-section">
+      <h3>THỜI GIAN HOẠT ĐỘNG</h3>
+      <p>Thứ 2 - Thứ 6: 8:00 - 21:00</p>
+      <p>Thứ 7: 9:00 - 17:00</p>
+      <p>Chủ nhật: Đóng cửa</p>
+    </div>
+    <div class="footer-section">
+      <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
+      <p>[QR] [Facebook] [YouTube]</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/return.js"></script>
+</body>
+</html>
