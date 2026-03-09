@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Báo cáo thống kê - Library University</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">LIBRARY UNIVERSITY</div>
+    <ul class="nav-menu">
+      <li><a href="thongtin.html">Thông tin chung</a></li>
+      <li><a href="quanlysach.html">Quản lý kho</a></li>
+      <li><a href="muonsach.html">Quản lý mượn sách</a></li>
+      <li><a href="trasach.html">Quản lý trả sách</a></li>
+      <li><a href="baocao.html" class="active">Báo cáo thống kê</a></li>
+    </ul>
+  </nav>
+
+  <!-- Nội dung chính -->
+  <main class="report">
+    <h1>BÁO CÁO THỐNG KÊ</h1>
+
+    <!-- Biểu đồ -->
+    <section class="chart-section">
+      <h2>Biểu đồ thống kê tiền phạt qua từng tháng (2025 - 2026)</h2>
+      <canvas id="fineChart"></canvas>
+    </section>
+
+    <!-- Bảng thống kê -->
+    <section class="table-section">
+      <h2>Chi tiết tiền phạt độc giả</h2>
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>Mã độc giả</th>
+            <th>Tên độc giả</th>
+            <th>Tiền phạt</th>
+            <th>Trạng thái thanh toán</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AD02</td>
+            <td>Nguyễn Hà Nhi</td>
+            <td>20.000 VND</td>
+            <td>Chưa thanh toán</td>
+          </tr>
+          <tr>
+            <td>SV0123</td>
+            <td>Phạm Yến Nhi</td>
+            <td>15.000 VND</td>
+            <td>Đã thanh toán</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-section">
+      <h3>LIÊN HỆ</h3>
+      <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội, Việt Nam</p>
+      <p>Điện thoại: (84)24.12.345.678</p>
+      <p>Email: libuniversity@gmail.com</p>
+    </div>
+    <div class="footer-section">
+      <h3>THỜI GIAN HOẠT ĐỘNG</h3>
+      <p>Thứ 2 - Thứ 6: 8:00 - 21:00</p>
+      <p>Thứ 7: 9:00 - 17:00</p>
+      <p>Chủ nhật: Đóng cửa</p>
+    </div>
+    <div class="footer-section">
+      <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
+      <p>[QR] [Facebook] [YouTube]</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="assets/js/report.js"></script>
+</body>
+</html>
 
