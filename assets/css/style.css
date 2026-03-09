@@ -338,3 +338,45 @@ footer {
   background: #004080;
   color: #fff;
 }
+/* Quản lý mượn sách */
+.borrow-management {
+  padding: 20px;
+}
+
+.borrow-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.borrow-table th, .borrow-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.borrow-table th {
+  background: #004080;
+  color: #fff;
+}
+
+/* Thông báo kiểm tra mã độc giả */
+#notification {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.success {
+  background: #2ecc71;
+  color: #fff;
+}
+
+.error {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.hidden {
+  display: none;
+}
