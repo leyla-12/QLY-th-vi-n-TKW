@@ -1,1 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quản lý tài khoản - Library University</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">LIBRARY UNIVERSITY</div>
+    <ul class="nav-menu">
+      <li><a href="thongtin.html">Thông tin chung</a></li>
+      <li><a href="quanlysach.html">Quản lý kho</a></li>
+      <li><a href="muonsach.html">Quản lý mượn sách</a></li>
+      <li><a href="trasach.html">Quản lý trả sách</a></li>
+      <li class="dropdown">
+        <a href="#" class="active">Thủ thư ▼</a>
+        <ul class="dropdown-menu">
+          <li><a href="taikhoan.html" class="active">Quản lý tài khoản</a></li>
+          <li><a href="dangxuat.html">Đăng xuất</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Nội dung chính -->
+  <main class="account-management">
+    <h1>DANH SÁCH TÌM KIẾM</h1>
+    <table class="account-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Họ tên</th>
+          <th>Lớp</th>
+          <th>Email</th>
+          <th>Vai trò</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="accountList">
+        <tr>
+          <td>SV0123</td>
+          <td>Phạm Yến Nhi</td>
+          <td>QT01</td>
+          <td>phamyennhi@gmail.com</td>
+          <td>Độc giả</td>
+          <td>Hoạt động</td>
+          <td>
+            <button class="btn-edit">Sửa</button>
+            <button class="btn-delete">Xóa</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="btn-primary" id="createAccount">TẠO TÀI KHOẢN MỚI</button>
+
+    <!-- Form cập nhật/tạo tài khoản -->
+    <div id="accountForm" class="modal hidden">
+      <div class="modal-content">
+        <h2 id="formTitle">Cập nhật thông tin</h2>
+        <label>Họ tên</label>
+        <input type="text" id="name" />
+
+        <label>ID</label>
+        <input type="text" id="id" />
+
+        <label>Email</label>
+        <input type="email" id="email" />
+
+        <label>Ngày sinh</label>
+        <input type="date" id="dob" />
+
+        <label>Lớp</label>
+        <input type="text" id="class" />
+
+        <label>Giới tính</label>
+        <select id="gender">
+          <option>Nam</option>
+          <option>Nữ</option>
+        </select>
+
+        <label>Số điện thoại</label>
+        <input type="text" id="phone" />
+
+        <label>Vai trò</label>
+        <select id="role">
+          <option>Admin</option>
+          <option>Thủ thư</option>
+          <option>Độc giả</option>
+        </select>
+
+        <label>Trạng thái</label>
+        <select id="status">
+          <option>Hoạt động</option>
+          <option>Đã khóa</option>
+          <option>Chờ kích hoạt</option>
+        </select>
+
+        <div class="form-actions">
+          <button class="btn-primary" id="saveAccount">Cập nhật</button>
+          <button class="btn-secondary" id="closeForm">Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup xác nhận xóa -->
+    <div id="deleteConfirm" class="modal hidden">
+      <div class="modal-content">
+        <h2>XÓA TÀI KHOẢN</h2>
+        <p>Bạn có chắc chắn muốn xóa tài khoản này khỏi hệ thống không?</p>
+        <div class="form-actions">
+          <button class="btn-secondary" id="cancelDelete">Hủy</button>
+          <button class="btn-delete" id="confirmDelete">Xóa</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thông báo -->
+    <div id="notification" class="notification hidden"></div>
+  </main>
+
+  <script src="assets/js/accounts.js"></script>
+</body>
+</html>
 
