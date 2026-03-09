@@ -1,82 +1,692 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quản lý trả sách - Library University</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <title>Quản lý trả sách — Library University</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:       #0f2a5e;
+      --navy-mid:   #163880;
+      --blue:       #1a56c8;
+      --blue-light: #2e6ddf;
+      --blue-50:    #eef4ff;
+      --blue-100:   #d9e8ff;
+      --red:        #c0392b;
+      --red-bg:     #fdf2f1;
+      --red-border: #f5c6c2;
+      --green:      #16a34a;
+      --green-bg:   #f0fdf4;
+      --amber:      #b45309;
+      --amber-bg:   #fffbeb;
+      --gray-900:   #0f172a;
+      --gray-700:   #334155;
+      --gray-600:   #4b5563;
+      --gray-500:   #64748b;
+      --gray-400:   #94a3b8;
+      --gray-300:   #cbd5e1;
+      --gray-100:   #f1f5f9;
+      --gray-50:    #f8fafc;
+      --white:      #ffffff;
+      --border:     #e2e8f0;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md:  0 4px 16px rgba(0,0,0,0.10);
+      --shadow-lg:  0 8px 32px rgba(0,0,0,0.14);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      background: #f0f4f8;
+      color: var(--gray-700);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══════════════════════════════════════
+       HEADER
+    ═══════════════════════════════════════ */
+    .header {
+      background: var(--navy);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      height: 56px;
+      padding: 0 32px;
+      width: 100%;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; flex-shrink: 0; margin-right: 32px;
+    }
+    .brand-icon {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .brand-name { font-size: 12.5px; font-weight: 800; color: #fff; letter-spacing: 1.4px; line-height: 1.2; }
+    .brand-sub  { font-size: 9.5px; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; }
+
+    .nav-links { display: flex; align-items: center; flex: 1; height: 56px; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      padding: 0 16px; height: 56px;
+      display: flex; align-items: center;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap; letter-spacing: 0.1px;
+    }
+    .nav-links a:hover { color: rgba(255,255,255,0.9); }
+    .nav-links a.active { color: #fff; font-weight: 700; border-bottom-color: #5b9cf6; }
+
+    .user-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      font-size: 13px; font-weight: 600; color: #fff;
+      cursor: pointer; position: relative;
+      transition: background 0.15s; flex-shrink: 0; margin-left: auto;
+    }
+    .user-btn:hover { background: rgba(255,255,255,0.18); }
+    .user-avatar {
+      width: 26px; height: 26px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+    .user-dropdown {
+      display: none; position: absolute; right: 0; top: calc(100% + 8px);
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 8px; min-width: 190px;
+      box-shadow: var(--shadow-lg); z-index: 200; overflow: hidden;
+    }
+    .user-btn:hover .user-dropdown { display: block; }
+    .user-dropdown a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; font-size: 13px; color: var(--gray-700);
+      text-decoration: none; border-bottom: 1px solid var(--gray-100);
+      transition: background 0.1s;
+    }
+    .user-dropdown a:last-child { border-bottom: none; color: var(--red); }
+    .user-dropdown a:hover { background: var(--gray-50); }
+
+    /* ═══════════════════════════════════════
+       WELCOME STRIP
+    ═══════════════════════════════════════ */
+    .welcome-strip {
+      background: linear-gradient(90deg, #e8f0fe 0%, #f0f6ff 100%);
+      border-bottom: 1px solid #c7d9f7;
+      padding: 8px 32px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .welcome-strip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+    .welcome-strip .name { font-size: 13px; font-weight: 700; color: var(--red); letter-spacing: 0.3px; }
+    .welcome-strip .sub  { font-size: 12px; color: var(--gray-500); }
+
+    /* ═══════════════════════════════════════
+       MAIN
+    ═══════════════════════════════════════ */
+    main { flex: 1; width: 100%; padding: 28px 40px 40px; }
+
+    /* PAGE HEADER */
+    .page-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; gap: 20px;
+    }
+    .page-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.2px; color: var(--blue); margin-bottom: 2px;
+    }
+    .page-title {
+      font-family: 'Lora', serif;
+      font-size: 24px; font-weight: 600; color: var(--navy); letter-spacing: -0.3px;
+    }
+    .search-wrap { position: relative; width: 280px; }
+    .search-wrap svg {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%); color: var(--gray-400); pointer-events: none;
+    }
+    .search-input {
+      width: 100%; height: 38px; padding: 0 14px 0 36px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 13px; font-family: inherit; color: var(--gray-700);
+      background: var(--white); outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,86,200,0.1); }
+    .search-input::placeholder { color: var(--gray-300); }
+
+    /* CHECK CARD */
+    .check-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .check-card-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.9px; color: var(--gray-400); margin-bottom: 12px;
+    }
+    .check-row { display: flex; align-items: center; gap: 10px; }
+    .check-input {
+      flex: 1; height: 40px; padding: 0 14px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 13.5px; font-family: inherit; color: var(--gray-700);
+      background: var(--white); outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .check-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,86,200,0.1); }
+    .check-input::placeholder { color: var(--gray-300); }
+    .btn-check {
+      height: 40px; padding: 0 22px;
+      background: var(--navy); color: #fff; border: none; border-radius: 8px;
+      font-size: 13.5px; font-weight: 600; font-family: inherit;
+      cursor: pointer; white-space: nowrap;
+      transition: background 0.15s, transform 0.1s; letter-spacing: 0.2px;
+    }
+    .btn-check:hover  { background: var(--navy-mid); }
+    .btn-check:active { transform: scale(0.98); }
+
+    .check-status {
+      display: none; margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 13px; font-weight: 600;
+      align-items: center; gap: 8px;
+    }
+    .check-status.show { display: flex; }
+    .check-status.ok    { background: var(--green-bg); color: #15803d; border: 1px solid #bbf7d0; }
+    .check-status.error { background: var(--red-bg); color: #b91c1c; border: 1px solid var(--red-border); }
+
+    /* ═══════════════════════════════════════
+       CONTENT AREA — phiếu mượn + nút tạo phiếu phạt
+    ═══════════════════════════════════════ */
+    .content-area {
+      display: none; gap: 20px; align-items: flex-start; margin-bottom: 20px;
+    }
+    .content-area.visible { display: flex; }
+
+    /* PHIẾU MƯỢN SÁCH */
+    .borrow-slip {
+      flex: 1;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .slip-title {
+      text-align: center;
+      font-family: 'Lora', serif;
+      font-size: 17px; font-weight: 600;
+      color: var(--navy);
+      letter-spacing: 0.2px;
+      margin-bottom: 22px;
+    }
+
+    .slip-field { margin-bottom: 16px; }
+    .slip-field > .field-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.9px;
+      color: var(--gray-400); margin-bottom: 8px;
+    }
+    .field-box {
+      background: var(--gray-50);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-size: 13.5px; color: var(--gray-700);
+    }
+
+    .book-list-items { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .book-list-items li {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 14px;
+      background: var(--gray-50); border: 1px solid var(--border);
+      border-radius: 7px; font-size: 13.5px; color: var(--gray-700);
+    }
+    .book-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+
+    .slip-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 20px; gap: 12px; flex-wrap: wrap;
+      padding-top: 16px; border-top: 1.5px solid var(--border);
+    }
+    .status-row { display: flex; align-items: center; gap: 8px; }
+    .status-row > span { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray-400); }
+    .status-select {
+      height: 34px; padding: 0 10px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      font-size: 13px; font-family: inherit; color: var(--gray-700);
+      background: var(--white); outline: none; cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .status-select:focus { border-color: var(--blue); }
+
+    .overdue-note {
+      font-size: 13px; font-weight: 600; color: #b91c1c;
+      background: var(--red-bg); border: 1px solid var(--red-border);
+      border-radius: 6px; padding: 4px 10px;
+    }
+    .btn-save {
+      height: 36px; padding: 0 22px;
+      background: var(--navy); color: #fff; border: none; border-radius: 7px;
+      font-size: 13.5px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .btn-save:hover { background: var(--navy-mid); }
+
+    /* NÚT TẠO PHIẾU PHẠT */
+    .fine-trigger {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .btn-create-fine {
+      display: flex; align-items: center; gap: 8px;
+      height: 40px; padding: 0 20px;
+      background: var(--blue); color: #fff; border: none; border-radius: 8px;
+      font-size: 13.5px; font-weight: 700; font-family: inherit;
+      cursor: pointer; white-space: nowrap;
+      box-shadow: var(--shadow-md);
+      transition: background 0.15s, transform 0.1s; letter-spacing: 0.3px;
+    }
+    .btn-create-fine:hover  { background: var(--blue-light); }
+    .btn-create-fine:active { transform: scale(0.98); }
+
+    /* ═══════════════════════════════════════
+       PHIẾU PHẠT TRẢ SÁCH
+    ═══════════════════════════════════════ */
+    .fine-slip {
+      display: none;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+    .fine-slip.visible { display: block; }
+
+    /* section title — same style as modal-section-title in muonsach */
+    .section-title {
+      font-size: 10.5px; font-weight: 700;
+      color: var(--gray-400); text-transform: uppercase;
+      letter-spacing: 0.9px; margin-bottom: 14px;
+      padding-bottom: 10px; border-bottom: 1.5px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-title::before {
+      content: ''; width: 3px; height: 12px;
+      background: var(--blue); border-radius: 2px;
+    }
+
+    .fine-meta-grid {
+      display: grid; grid-template-columns: 110px 1fr 140px;
+      gap: 0 16px; margin-bottom: 20px;
+    }
+    .fmg-head {
+      font-size: 11px; font-weight: 700; color: var(--gray-400);
+      text-transform: uppercase; letter-spacing: 0.8px;
+      padding-bottom: 8px; border-bottom: 1.5px solid var(--border);
+    }
+    .fmg-head:last-child { text-align: right; }
+    .fmg-val { font-size: 13.5px; color: var(--gray-700); padding-top: 10px; }
+    .fmg-val.code {
+      font-weight: 700; color: var(--blue);
+    }
+    .fmg-val.name-box {
+      background: var(--gray-50); border: 1.5px solid var(--border);
+      border-radius: 7px; padding: 6px 12px; font-weight: 600;
+    }
+    .fmg-val.amount {
+      font-weight: 700; color: #b91c1c; text-align: right; padding-top: 10px;
+    }
+
+    .fine-reason-box {
+      background: var(--gray-50); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;
+    }
+    .fine-reason-box ul { padding-left: 18px; }
+    .fine-reason-box ul li { font-size: 13.5px; color: var(--gray-700); margin-bottom: 4px; line-height: 1.7; }
+
+    .fine-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding-top: 16px; border-top: 1.5px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .fine-total-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray-400); margin-right: 4px; }
+    .fine-total-val { font-size: 13.5px; font-weight: 600; color: var(--gray-700); }
+    .fine-detail { font-size: 12px; color: var(--gray-400); font-weight: 400; }
+    .fine-total-val strong { color: #b91c1c; }
+
+    .btn-luu {
+      height: 38px; padding: 0 24px;
+      background: var(--navy); color: #fff; border: none; border-radius: 7px;
+      font-size: 13.5px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: background 0.15s; letter-spacing: 0.2px;
+    }
+    .btn-luu:hover { background: var(--navy-mid); }
+
+    /* ═══════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════ */
+    .toast {
+      position: fixed; top: 72px; right: 28px;
+      min-width: 290px; max-width: 360px;
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 13px 16px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 13.5px; font-weight: 500;
+      box-shadow: var(--shadow-lg); z-index: 9999;
+      pointer-events: none; opacity: 0; transform: translateX(20px);
+      transition: all 0.25s ease;
+    }
+    .toast.show { opacity: 1; transform: translateX(0); pointer-events: all; }
+    .toast-bar { width: 4px; border-radius: 2px; flex-shrink: 0; align-self: stretch; }
+    .toast.success .toast-bar { background: var(--green); }
+    .toast-title  { font-weight: 700; color: var(--gray-900); font-size: 13.5px; }
+    .toast-detail { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+    .toast-close  { cursor: pointer; color: var(--gray-300); font-size: 17px; margin-left: auto; }
+    .toast-close:hover { color: var(--gray-700); }
+
+    /* ═══════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════ */
+    .site-footer {
+      background: var(--navy);
+      padding: 28px 40px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+    .footer-col h4 {
+      font-size: 10.5px; font-weight: 800;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px;
+    }
+    .footer-col p { font-size: 12.5px; color: rgba(255,255,255,0.65); line-height: 1.9; }
+    .footer-icons { display: flex; gap: 8px; margin-top: 8px; }
+    .footer-icon {
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s; cursor: pointer;
+    }
+    .footer-icon:hover { background: rgba(255,255,255,0.2); }
+  </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-left">LIBRARY UNIVERSITY</div>
-    <ul class="nav-menu">
-      <li><a href="thongtin.html">Thông tin chung</a></li>
-      <li><a href="quanlysach.html">Quản lý kho</a></li>
-      <li><a href="muonsach.html">Quản lý mượn sách</a></li>
-      <li><a href="trasach.html" class="active">Quản lý trả sách</a></li>
-      <li><a href="baocao.html">Báo cáo thống kê</a></li>
-    </ul>
-  </nav>
 
-  <!-- Nội dung chính -->
-  <main class="return-management">
-    <h1>QUẢN LÝ TRẢ SÁCH</h1>
-
-    <!-- Kiểm tra độc giả -->
-    <section class="check-reader">
-      <label>Email độc giả</label>
-      <input type="email" id="readerEmail" placeholder="Nhập email độc giả..." />
-      <button class="btn-primary" id="checkReturn">Kiểm tra</button>
-      <div id="notification" class="hidden"></div>
-    </section>
-
-    <!-- Phiếu mượn -->
-    <section id="borrowSlip" class="hidden">
-      <h2>PHIẾU MƯỢN SÁCH</h2>
-      <p><strong>Độc giả:</strong> <span id="readerName"></span></p>
-      <p><strong>Mã:</strong> <span id="readerId"></span></p>
-      <p><strong>Trạng thái:</strong> <span id="status"></span></p>
-      <p><strong>Thời gian mượn:</strong> <span id="borrowPeriod"></span></p>
-      <ul id="borrowBooks"></ul>
-      <button class="btn-primary" id="createFine">TẠO PHIẾU PHẠT</button>
-    </section>
-
-    <!-- Phiếu phạt -->
-    <section id="fineSlip" class="hidden">
-      <h2>PHIẾU PHẠT TRẢ SÁCH</h2>
-      <p><strong>Độc giả:</strong> <span id="fineReader"></span></p>
-      <p><strong>Trạng thái:</strong> Quá hạn</p>
-      <p><strong>Tổng tiền phạt:</strong> <span id="fineTotal"></span> VND</p>
-      <ul id="fineDetails"></ul>
-      <div class="form-actions">
-        <button class="btn-primary">GỬI</button>
-        <button class="btn-secondary">RESET</button>
+<!-- ════════ HEADER ════════ -->
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="#">
+      <div class="brand-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
       </div>
-    </section>
-  </main>
+      <div>
+        <div class="brand-name">LIBRARY UNIVERSITY</div>
+        <div class="brand-sub">Hệ thống quản lý thư viện</div>
+      </div>
+    </a>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-section">
-      <h3>LIÊN HỆ</h3>
-      <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội, Việt Nam</p>
-      <p>Điện thoại: (84)24.12.345.678</p>
-      <p>Email: libuniversity@gmail.com</p>
-    </div>
-    <div class="footer-section">
-      <h3>THỜI GIAN HOẠT ĐỘNG</h3>
-      <p>Thứ 2 - Thứ 6: 8:00 - 21:00</p>
-      <p>Thứ 7: 9:00 - 17:00</p>
-      <p>Chủ nhật: Đóng cửa</p>
-    </div>
-    <div class="footer-section">
-      <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
-      <p>[QR] [Facebook] [YouTube]</p>
-    </div>
-  </footer>
+    <nav class="nav-links">
+      <a href="taikhoan.html">Quản lý tài khoản</a>
+      <a href="quanlysach.html">Quản lý sách</a>
+      <a href="muonsach.html">Quản lý mượn sách</a>
+      <a href="trasach.html" class="active">Trả sách</a>
+      <a href="baocao.html">Báo cáo thống kê</a>
+    </nav>
 
-  <script src="assets/js/return.js"></script>
+    <div class="user-btn">
+      <div class="user-avatar">TT</div>
+      Thủ thư
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <div class="user-dropdown">
+        <a href="taikhoan.html">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Quản lý tài khoản
+        </a>
+        <a href="dangnhap.html">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Đăng xuất
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ WELCOME STRIP ════════ -->
+<div class="welcome-strip">
+  <div class="dot"></div>
+  <span class="name">CHÀO BẠN ABC!</span>
+  <span class="sub">— Giá sách của bạn tại đây</span>
+</div>
+
+<!-- ════════ MAIN ════════ -->
+<main>
+
+  <!-- Page header -->
+  <div class="page-head">
+    <div>
+      <div class="page-label">Thư viện</div>
+      <div class="page-title">Quản lý trả sách</div>
+    </div>
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" type="text" placeholder="Tìm kiếm phiếu mượn..." />
+    </div>
+  </div>
+
+  <!-- Kiểm tra độc giả -->
+  <div class="check-card">
+    <div class="check-card-label">Kiểm tra phiếu mượn</div>
+    <div class="check-row">
+      <input class="check-input" type="text" id="readerInput" placeholder="Nhập email hoặc mã độc giả..." />
+      <button class="btn-check" id="btnCheck">Kiểm tra phiếu mượn</button>
+    </div>
+    <div class="check-status" id="checkStatus">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" id="checkIcon"><polyline points="20 6 9 17 4 12"/></svg>
+      <span id="checkMsg"></span>
+    </div>
+  </div>
+
+  <!-- PHIẾU MƯỢN + NÚT TẠO PHIẾU PHẠT -->
+  <div class="content-area" id="contentArea">
+
+    <!-- PHIẾU MƯỢN SÁCH -->
+    <div class="borrow-slip">
+      <div class="slip-title">Phiếu Mượn Sách</div>
+
+      <div class="slip-field">
+        <div class="field-label">Thời hạn mượn sách</div>
+        <div class="field-box">09/04/2026 – 13/04/2026</div>
+      </div>
+
+      <div class="slip-field">
+        <div class="field-label">Lịch sử mượn sách</div>
+        <ul class="book-list-items">
+          <li><span class="book-dot"></span>Giáo trình Lịch sử Đảng Cộng sản Việt Nam</li>
+          <li><span class="book-dot"></span>Bài tập Kinh tế lượng</li>
+          <li><span class="book-dot"></span>Giáo trình Kinh tế lượng</li>
+        </ul>
+      </div>
+
+      <div class="slip-bottom">
+        <div class="status-row">
+          <span>Tình trạng</span>
+          <select class="status-select">
+            <option>Chưa trả sách</option>
+            <option>Đã trả sách</option>
+          </select>
+        </div>
+        <div class="overdue-note">Quá hạn trả sách 5 ngày</div>
+        <button class="btn-save">Lưu</button>
+      </div>
+    </div>
+
+    <!-- NÚT TẠO PHIẾU PHẠT — tách rời, bên phải -->
+    <div class="fine-trigger">
+      <button class="btn-create-fine" id="btnCreateFine">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        TẠO PHIẾU PHẠT
+      </button>
+    </div>
+
+  </div>
+
+  <!-- PHIẾU PHẠT TRẢ SÁCH -->
+  <div class="fine-slip" id="fineSlip">
+    <div class="slip-title">Phiếu Phạt Trả Sách</div>
+
+    <div class="section-title">Thông tin phiếu phạt</div>
+
+    <div class="fine-meta-grid">
+      <div class="fmg-head">Mã phiếu</div>
+      <div class="fmg-head">Thông tin độc giả</div>
+      <div class="fmg-head">Tiền phạt</div>
+
+      <div class="fmg-val code">PP0023</div>
+      <div class="fmg-val name-box">LÊ THANH NGÂN</div>
+      <div class="fmg-val amount">85.000 VNĐ</div>
+    </div>
+
+    <div class="section-title">Lý do</div>
+    <div class="fine-reason-box">
+      <ul>
+        <li>Quá hạn 5 ngày</li>
+        <li>Mất 2 cuốn sách</li>
+      </ul>
+    </div>
+
+    <div class="fine-foot">
+      <div>
+        <span class="fine-total-label">Phí thanh toán:</span>
+        <span class="fine-total-val">
+          60.000 VNĐ + 25.000 VNĐ
+          <span class="fine-detail">(5.000 VNĐ/Ngày)</span>
+          = <strong>85.000 VNĐ</strong>
+        </span>
+      </div>
+      <button class="btn-luu" id="btnSaveFine">Lưu thông tin</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- TOAST -->
+<div class="toast" id="gToast">
+  <div class="toast-bar"></div>
+  <div style="flex:1">
+    <div class="toast-title"  id="gToastTitle"></div>
+    <div class="toast-detail" id="gToastDetail"></div>
+  </div>
+  <span class="toast-close" onclick="hideToast()">&#x2715;</span>
+</div>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="site-footer">
+  <div class="footer-col">
+    <h4>Liên hệ</h4>
+    <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội<br>
+       Điện thoại: (84)24.12.345.678<br>
+       Email: libuniversity@gmail.com</p>
+  </div>
+  <div class="footer-col">
+    <h4>Thời gian hoạt động</h4>
+    <p>Thứ 2 – Thứ 6: 8:00 – 21:00<br>Thứ 7: 9:00 – 17:00<br>Chủ nhật: Đóng cửa</p>
+  </div>
+  <div class="footer-col">
+    <h4>Kết nối với chúng tôi</h4>
+    <div class="footer-icons">
+      <div class="footer-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </div>
+      <div class="footer-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon fill="#0f2a5e" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const readers = [
+    {email:'leengan.k5@gmail.com', id:'PM0034', name:'Lê Thanh Ngân',    cls:'IS01'},
+    {email:'admin01@gmail.com',    id:'AD01',   name:'Nguyễn Phương Nhi', cls:'—'},
+  ];
+
+  document.getElementById('btnCheck').addEventListener('click', checkReader);
+  document.getElementById('readerInput').addEventListener('keydown', e => { if(e.key==='Enter') checkReader(); });
+
+  function checkReader() {
+    const val = document.getElementById('readerInput').value.trim().toLowerCase();
+    const statusEl = document.getElementById('checkStatus');
+    const msgEl    = document.getElementById('checkMsg');
+    const iconEl   = document.getElementById('checkIcon');
+
+    if (!val) {
+      msgEl.textContent = 'Vui lòng nhập email hoặc mã độc giả.';
+      iconEl.innerHTML  = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+      statusEl.className = 'check-status show error';
+      return;
+    }
+    const found = readers.find(r => r.email.toLowerCase()===val || r.id.toLowerCase()===val);
+    if (found) {
+      msgEl.textContent = `Độc giả hợp lệ: ${found.name} · ${found.id} · Lớp ${found.cls}`;
+      iconEl.innerHTML  = '<polyline points="20 6 9 17 4 12"/>';
+      statusEl.className = 'check-status show ok';
+      document.getElementById('contentArea').classList.add('visible');
+    } else {
+      msgEl.textContent = 'Không tìm thấy độc giả. Vui lòng kiểm tra lại.';
+      iconEl.innerHTML  = '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>';
+      statusEl.className = 'check-status show error';
+      document.getElementById('contentArea').classList.remove('visible');
+      document.getElementById('fineSlip').classList.remove('visible');
+    }
+  }
+
+  document.getElementById('btnCreateFine').addEventListener('click', () => {
+    const slip = document.getElementById('fineSlip');
+    slip.classList.add('visible');
+    slip.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  let toastTimer;
+  document.getElementById('btnSaveFine').addEventListener('click', () => {
+    showToast('Lưu phiếu phạt thành công', 'PP0023 – Lê Thanh Ngân · 85.000 VNĐ', 'success');
+  });
+
+  function showToast(title, detail, type='success') {
+    clearTimeout(toastTimer);
+    document.getElementById('gToastTitle').textContent  = title;
+    document.getElementById('gToastDetail').textContent = detail;
+    document.getElementById('gToast').className = `toast ${type} show`;
+    toastTimer = setTimeout(hideToast, 4000);
+  }
+  function hideToast() { document.getElementById('gToast').className = 'toast'; }
+</script>
 </body>
 </html>
