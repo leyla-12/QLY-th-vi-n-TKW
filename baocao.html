@@ -3,36 +3,397 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Báo cáo thống kê - Library University</title>
+  <title>Báo cáo thống kê — Library University</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --blue-700:  #1a56a4;
+      --blue-600:  #1d6cbf;
+      --blue-100:  #dbeafe;
+      --blue-50:   #eff6ff;
+      --red-600:   #dc2626;
+      --red-100:   #fee2e2;
+      --green-600: #16a34a;
+      --green-100: #dcfce7;
+      --amber-600: #d97706;
+      --amber-100: #fef3c7;
+      --gray-900:  #0f172a;
+      --gray-700:  #334155;
+      --gray-500:  #64748b;
+      --gray-300:  #cbd5e1;
+      --gray-200:  #e2e8f0;
+      --gray-100:  #f1f5f9;
+      --gray-50:   #f8fafc;
+      --white:     #ffffff;
+      --border:    #e2e8f0;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      background: var(--gray-50);
+      color: var(--gray-700);
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--blue-700); height: 44px; padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .brand-icon {
+      width:28px; height:28px; background:rgba(255,255,255,0.15);
+      border:1px solid rgba(255,255,255,0.25); border-radius:5px;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .brand-name { font-size:13px; font-weight:700; color:#fff; letter-spacing:1.2px; }
+    .topbar-right { display:flex; align-items:center; gap:6px; }
+    .topbar-right span { font-size:12px; color:rgba(255,255,255,0.65); }
+    .topbar-user {
+      display:flex; align-items:center; gap:7px;
+      background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+      border-radius:4px; padding:4px 12px;
+      font-size:12.5px; font-weight:600; color:#fff;
+      cursor:pointer; position:relative; transition:background 0.15s;
+    }
+    .topbar-user:hover { background:rgba(255,255,255,0.2); }
+    .user-dropdown {
+      display:none; position:absolute; right:0; top:calc(100% + 6px);
+      background:var(--white); border:1px solid var(--border); border-radius:6px;
+      min-width:180px; box-shadow:0 4px 16px rgba(0,0,0,0.10); z-index:200;
+    }
+    .topbar-user:hover .user-dropdown { display:block; }
+    .user-dropdown a {
+      display:block; padding:9px 16px; font-size:13px; color:var(--gray-700);
+      text-decoration:none; border-bottom:1px solid var(--gray-100); transition:background 0.1s;
+    }
+    .user-dropdown a:last-child { border-bottom:none; color:var(--red-600); }
+    .user-dropdown a:hover { background:var(--gray-50); }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background:var(--white); border-bottom:1px solid var(--border);
+      height:48px; padding:0 32px;
+      display:flex; align-items:center;
+      position:sticky; top:0; z-index:100;
+      box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    }
+    .nav-links { display:flex; align-items:center; }
+    .nav-links a {
+      font-size:13.5px; font-weight:500; color:var(--gray-500);
+      text-decoration:none; padding:0 18px; height:48px;
+      display:flex; align-items:center;
+      border-bottom:2px solid transparent; transition:color 0.15s, border-color 0.15s;
+      white-space:nowrap;
+    }
+    .nav-links a:hover { color:var(--blue-600); }
+    .nav-links a.active { color:var(--blue-700); font-weight:600; border-bottom-color:var(--blue-700); }
+
+    /* ── MAIN ── */
+    main { flex:1; padding:28px 32px; }
+
+    .page-head {
+      display:flex; align-items:flex-end; justify-content:space-between;
+      margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border);
+    }
+    .page-title { font-size:20px; font-weight:700; color:var(--gray-900); letter-spacing:-0.2px; }
+    .page-sub   { font-size:13px; color:var(--gray-500); margin-top:2px; }
+
+    /* ── TABS ── */
+    .tabs {
+      display:flex; border-bottom:2px solid var(--border); margin-bottom:24px; gap:0;
+    }
+    .tab-btn {
+      padding:10px 24px; font-size:13.5px; font-weight:500;
+      color:var(--gray-500); background:none; border:none;
+      border-bottom:2px solid transparent; margin-bottom:-2px;
+      cursor:pointer; font-family:inherit; transition:all 0.15s; white-space:nowrap;
+    }
+    .tab-btn:hover { color:var(--blue-600); }
+    .tab-btn.active { color:var(--blue-700); font-weight:700; border-bottom-color:var(--blue-700); }
+
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; margin-bottom:16px;
+    }
+    .toolbar-left { display:flex; align-items:center; gap:10px; }
+    .search-wrap { position:relative; }
+    .search-wrap svg {
+      position:absolute; left:11px; top:50%; transform:translateY(-50%);
+      color:var(--gray-500); pointer-events:none;
+    }
+    .search-input {
+      width:280px; height:36px; padding:0 12px 0 36px;
+      border:1px solid var(--border); border-radius:5px;
+      font-size:13.5px; font-family:inherit; color:var(--gray-700);
+      background:var(--white); outline:none; transition:border-color 0.15s, box-shadow 0.15s;
+    }
+    .search-input:focus { border-color:var(--blue-600); box-shadow:0 0 0 3px rgba(29,108,191,0.12); }
+    .search-input::placeholder { color:var(--gray-300); }
+
+    select.filter-select {
+      height:36px; padding:0 10px; border:1px solid var(--border);
+      border-radius:5px; font-size:13px; font-family:inherit;
+      color:var(--gray-700); background:var(--white); outline:none; cursor:pointer;
+    }
+
+    .btn-export {
+      display:inline-flex; align-items:center; gap:6px;
+      height:36px; padding:0 16px;
+      background:var(--white); color:var(--gray-700);
+      border:1px solid var(--border); border-radius:5px;
+      font-size:13px; font-weight:600; font-family:inherit;
+      cursor:pointer; transition:background 0.15s;
+    }
+    .btn-export:hover { background:var(--gray-100); }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background:var(--white); border:1px solid var(--border);
+      border-radius:8px; overflow:hidden;
+    }
+    table { width:100%; border-collapse:collapse; }
+    thead tr { background:var(--gray-50); }
+    th {
+      padding:11px 16px; font-size:11.5px; font-weight:700; color:var(--gray-500);
+      text-align:left; border-bottom:1px solid var(--border);
+      text-transform:uppercase; letter-spacing:0.6px; white-space:nowrap;
+    }
+    td {
+      padding:12px 16px; font-size:13.5px; color:var(--gray-700);
+      border-bottom:1px solid var(--gray-100); vertical-align:middle;
+    }
+    tbody tr:last-child td { border-bottom:none; }
+    tbody tr:hover { background:var(--gray-50); }
+
+    .cell-id    { font-weight:600; color:var(--gray-900); font-size:13px; }
+    .cell-muted { color:var(--gray-500); font-size:13px; }
+    .cell-num   { font-weight:600; color:var(--gray-900); }
+    .cell-red   { font-weight:600; color:var(--red-600); }
+
+    .badge {
+      display:inline-block; padding:2px 9px; border-radius:3px;
+      font-size:11.5px; font-weight:600; letter-spacing:0.2px;
+    }
+    .badge-paid   { background:var(--green-100); color:var(--green-600); }
+    .badge-unpaid { background:var(--red-100);   color:var(--red-600);   }
+    .badge-ret    { background:var(--green-100); color:var(--green-600); }
+    .badge-noret  { background:var(--amber-100); color:var(--amber-600); }
+
+    .btn-act {
+      height:28px; padding:0 10px;
+      border:1px solid var(--border); border-radius:4px;
+      background:var(--white); cursor:pointer; font-family:inherit;
+      font-size:12px; font-weight:500; color:var(--gray-700);
+      display:inline-flex; align-items:center; gap:4px; transition:all 0.12s;
+    }
+    .btn-act:hover { background:var(--gray-100); }
+
+    /* ── CHART SECTION ── */
+    .chart-card {
+      background:var(--white); border:1px solid var(--border);
+      border-radius:8px; padding:24px; margin-bottom:24px;
+    }
+    .chart-head {
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;
+    }
+    .chart-title { font-size:14px; font-weight:700; color:var(--gray-900); }
+    .chart-sub   { font-size:12.5px; color:var(--gray-500); margin-top:2px; }
+    .chart-container { position:relative; height:260px; }
+
+    /* ── LAYOUT 2 COL ── */
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px; }
+
+    /* ── FOOTER ── */
+    .footer-bar {
+      background:var(--gray-900); color:rgba(255,255,255,0.55);
+      padding:0 32px; font-size:12px;
+      display:flex; flex-wrap:wrap; align-items:stretch;
+    }
+    .footer-col {
+      padding:18px 32px 18px 0; border-right:1px solid rgba(255,255,255,0.08);
+      margin-right:32px;
+    }
+    .footer-col:last-child { border-right:none; margin-right:0; }
+    .footer-col h4 { font-size:11px; font-weight:700; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px; }
+    .footer-col p  { line-height:1.9; color:rgba(255,255,255,0.6); }
+    .footer-col a  { color:rgba(255,255,255,0.5); text-decoration:none; }
+  </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-left">LIBRARY UNIVERSITY</div>
-    <ul class="nav-menu">
-      <li><a href="thongtin.html">Thông tin chung</a></li>
-      <li><a href="quanlysach.html">Quản lý kho</a></li>
-      <li><a href="muonsach.html">Quản lý mượn sách</a></li>
-      <li><a href="trasach.html">Quản lý trả sách</a></li>
-      <li><a href="baocao.html" class="active">Báo cáo thống kê</a></li>
-    </ul>
-  </nav>
 
-  <!-- Nội dung chính -->
-  <main class="report">
-    <h1>BÁO CÁO THỐNG KÊ</h1>
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-brand" href="#">
+    <div class="brand-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+    </div>
+    <span class="brand-name">LIBRARY UNIVERSITY</span>
+  </a>
+  <div class="topbar-right">
+    <span>Hệ thống quản lý thư viện</span>
+    <div class="topbar-user">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Admin
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <div class="user-dropdown">
+        <a href="taikhoan.html">Quản lý tài khoản</a>
+        <a href="dangnhap.html">Đăng xuất</a>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-links">
+    <a href="taikhoan.html">Quản lý tài khoản</a>
+    <a href="quanlysach.html">Quản lý sách</a>
+    <a href="muonsach.html">Quản lý mượn sách</a>
+    <a href="trasach.html">Trả sách</a>
+    <a href="baocao.html" class="active">Báo cáo thống kê</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+  <div class="page-head">
+    <div>
+      <div class="page-title">Báo cáo thống kê</div>
+      <div class="page-sub">Tổng hợp thông tin của thư viện</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="khosach">Kho sách</button>
+    <button class="tab-btn" data-tab="phieumuon">Phiếu mượn</button>
+    <button class="tab-btn" data-tab="tienphat">Tiền phạt</button>
+  </div>
+
+  <!-- TAB: KHO SÁCH -->
+  <div class="tab-panel active" id="tab-khosach">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" id="searchSach" type="text" placeholder="Tìm tên sách..." />
+        </div>
+        <select class="filter-select" id="filterLoai">
+          <option value="">Tất cả thể loại</option>
+          <option>Giáo trình</option>
+          <option>Bài tập</option>
+          <option>Tài liệu tham khảo</option>
+        </select>
+      </div>
+      <button class="btn-export" onclick="exportTable('tableSach','bao-cao-kho-sach')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Xuất báo cáo
+      </button>
+    </div>
+    <div class="table-wrap">
+      <table id="tableSach">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tên sách</th>
+            <th>Đã mượn</th>
+            <th>Số lượng khả dụng</th>
+          </tr>
+        </thead>
+        <tbody id="bodySach"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: PHIẾU MƯỢN -->
+  <div class="tab-panel" id="tab-phieumuon">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" id="searchMuon" type="text" placeholder="Tìm theo tên, mã độc giả..." />
+        </div>
+        <select class="filter-select" id="filterTrangThai">
+          <option value="">Tất cả trạng thái</option>
+          <option>Đã trả</option>
+          <option>Chưa trả</option>
+        </select>
+      </div>
+      <button class="btn-export" onclick="exportTable('tableMuon','bao-cao-phieu-muon')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Xuất báo cáo
+      </button>
+    </div>
+    <div class="table-wrap">
+      <table id="tableMuon">
+        <thead>
+          <tr>
+            <th>Họ tên</th>
+            <th>Lớp</th>
+            <th>Email</th>
+            <th>Trạng thái trả/mượn</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody id="bodyMuon"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: TIỀN PHẠT -->
+  <div class="tab-panel" id="tab-tienphat">
     <!-- Biểu đồ -->
-    <section class="chart-section">
-      <h2>Biểu đồ thống kê tiền phạt qua từng tháng (2025 - 2026)</h2>
-      <canvas id="fineChart"></canvas>
-    </section>
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">Biểu đồ thống kê tiền phạt qua từng tháng (2025 – 2026)</div>
+          <div class="chart-sub">Đơn vị: nghìn VND</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <select class="filter-select" id="filterNam" onchange="updateChart()">
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+          </select>
+          <button class="btn-export" onclick="exportTable('tablePhat','bao-cao-tien-phat')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Xuất báo cáo
+          </button>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="fineChart"></canvas>
+      </div>
+    </div>
 
-    <!-- Bảng thống kê -->
-    <section class="table-section">
-      <h2>Chi tiết tiền phạt độc giả</h2>
-      <table class="report-table">
+    <!-- Bảng -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" id="searchPhat" type="text" placeholder="Tìm theo tên, mã độc giả..." />
+        </div>
+        <select class="filter-select" id="filterThanhToan">
+          <option value="">Tất cả trạng thái</option>
+          <option>Đã thanh toán</option>
+          <option>Chưa thanh toán</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table id="tablePhat">
         <thead>
           <tr>
             <th>Mã độc giả</th>
@@ -41,46 +402,206 @@
             <th>Trạng thái thanh toán</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>AD02</td>
-            <td>Nguyễn Hà Nhi</td>
-            <td>20.000 VND</td>
-            <td>Chưa thanh toán</td>
-          </tr>
-          <tr>
-            <td>SV0123</td>
-            <td>Phạm Yến Nhi</td>
-            <td>15.000 VND</td>
-            <td>Đã thanh toán</td>
-          </tr>
-        </tbody>
+        <tbody id="bodyPhat"></tbody>
       </table>
-    </section>
-  </main>
+    </div>
+  </div>
+</main>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-section">
-      <h3>LIÊN HỆ</h3>
-      <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội, Việt Nam</p>
-      <p>Điện thoại: (84)24.12.345.678</p>
-      <p>Email: libuniversity@gmail.com</p>
-    </div>
-    <div class="footer-section">
-      <h3>THỜI GIAN HOẠT ĐỘNG</h3>
-      <p>Thứ 2 - Thứ 6: 8:00 - 21:00</p>
-      <p>Thứ 7: 9:00 - 17:00</p>
-      <p>Chủ nhật: Đóng cửa</p>
-    </div>
-    <div class="footer-section">
-      <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
-      <p>[QR] [Facebook] [YouTube]</p>
-    </div>
-  </footer>
+<!-- FOOTER -->
+<footer class="footer-bar">
+  <div class="footer-col">
+    <h4>Liên hệ</h4>
+    <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội, Việt Nam</p>
+    <p>Điện thoại: (84)24.12.345.678</p>
+    <p>Email: libuniversity@gmail.com</p>
+  </div>
+  <div class="footer-col">
+    <h4>Thời gian hoạt động</h4>
+    <p>Thứ 2 – Thứ 6: 8:00 – 21:00</p>
+    <p>Thứ 7: 9:00 – 17:00</p>
+    <p>Chủ nhật: Đóng cửa</p>
+  </div>
+  <div class="footer-col">
+    <h4>Kết nối với chúng tôi</h4>
+    <p><a href="#">Facebook</a> &nbsp;|&nbsp; <a href="#">YouTube</a></p>
+  </div>
+</footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="assets/js/report.js"></script>
+<script src="assets/js/report.js"></script>
+<script>
+  // ── DỮ LIỆU MẪU ──
+  const dataSach = [
+    {id:'GT01', name:'Giáo trình Kinh tế lượng',          muon:21, khaDung:50},
+    {id:'GT02', name:'Giáo trình Tiếng Anh thương mại 1', muon:20, khaDung:47},
+    {id:'BT01', name:'Bài tập Kinh tế lượng',             muon:10, khaDung:38},
+    {id:'BT02', name:'Bài tập Toán cao cấp',              muon:10, khaDung:50},
+    {id:'GT03', name:'Giáo trình Thương mại điện tử',     muon:16, khaDung:43},
+    {id:'TL01', name:'Tài liệu tham khảo Nghiên cứu KH',  muon:5,  khaDung:20},
+    {id:'GT04', name:'Giáo trình Marketing căn bản',      muon:38, khaDung:60},
+  ];
+
+  const dataMuon = [
+    {id:'AD01', name:'Nguyễn Phương Nhi', cls:'—',    email:'admin01@gmail.com',    status:'Đã trả'},
+    {id:'AD02', name:'Nguyễn Hà Nhi',     cls:'—',    email:'admin02@gmail.com',    status:'Chưa trả'},
+    {id:'TT02', name:'Nguyễn Tuệ Nhi',    cls:'—',    email:'thuthu1@gmail.com',    status:'Chưa trả'},
+    {id:'SV0054',name:'Trần Bảo Nhi',     cls:'IS01', email:'baonhi@gmail.com',     status:'Đã trả'},
+    {id:'SV0076',name:'Phạm Yến Nhi',     cls:'IS02', email:'yennhipham@gmail.com', status:'Đã trả'},
+    {id:'SV0123',name:'Phạm Yến Nhi',     cls:'QT01', email:'phamyennhi@gmail.com', status:'Đã trả'},
+    {id:'SV1011',name:'Trần Tuyết Nhi',   cls:'DK04', email:'tuyetnhi@gmail.com',   status:'Đã trả'},
+  ];
+
+  const dataPhat = [
+    {id:'AD02',   name:'Nguyễn Hà Nhi',   amount:'20.000 VND', paid:'Chưa thanh toán'},
+    {id:'SV0123', name:'Phạm Yến Nhi',    amount:'15.000 VND', paid:'Đã thanh toán'},
+    {id:'TT02',   name:'Nguyễn Tuệ Nhi',  amount:'10.000 VND', paid:'Chưa thanh toán'},
+    {id:'SV0076', name:'Phạm Yến Nhi',    amount:'5.000 VND',  paid:'Đã thanh toán'},
+  ];
+
+  const chartData = {
+    '2025': [25, 30, 45, 35, 40, 28, 33, 50, 42, 38, 55, 48],
+    '2026': [30, 22, 38, 44, 29, 0,  0,  0,  0,  0,  0,  0 ],
+  };
+  const months = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
+
+  // ── RENDER KHO SÁCH ──
+  function renderSach(data) {
+    document.getElementById('bodySach').innerHTML = data.map(s => `
+      <tr>
+        <td><span class="cell-id">${s.id}</span></td>
+        <td>${s.name}</td>
+        <td><span class="cell-num" style="color:var(--red-600)">${s.muon}</span></td>
+        <td><span class="cell-num" style="color:var(--blue-700)">${s.khaDung}</span></td>
+      </tr>`).join('');
+  }
+
+  // ── RENDER PHIẾU MƯỢN ──
+  function renderMuon(data) {
+    document.getElementById('bodyMuon').innerHTML = data.map(m => `
+      <tr>
+        <td>${m.name}</td>
+        <td><span class="cell-muted">${m.cls}</span></td>
+        <td><span class="cell-muted">${m.email}</span></td>
+        <td>${m.status === 'Đã trả'
+          ? '<span class="badge badge-ret">Đã trả</span>'
+          : '<span class="badge badge-noret">Chưa trả</span>'}</td>
+        <td>
+          <button class="btn-act">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Chi tiết
+          </button>
+        </td>
+      </tr>`).join('');
+  }
+
+  // ── RENDER TIỀN PHẠT ──
+  function renderPhat(data) {
+    document.getElementById('bodyPhat').innerHTML = data.map(p => `
+      <tr>
+        <td><span class="cell-id">${p.id}</span></td>
+        <td>${p.name}</td>
+        <td><span class="cell-red">${p.amount}</span></td>
+        <td>${p.paid === 'Đã thanh toán'
+          ? '<span class="badge badge-paid">Đã thanh toán</span>'
+          : '<span class="badge badge-unpaid">Chưa thanh toán</span>'}</td>
+      </tr>`).join('');
+  }
+
+  // ── TABS ──
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      if (btn.dataset.tab === 'tienphat' && !window.fineChartInstance) initChart();
+    });
+  });
+
+  // ── SEARCH / FILTER ──
+  document.getElementById('searchSach').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    renderSach(dataSach.filter(s => s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q)));
+  });
+  document.getElementById('filterLoai').addEventListener('change', function() {
+    const v = this.value;
+    renderSach(v ? dataSach.filter(s => s.name.includes(v === 'Giáo trình' ? 'Giáo trình' : v === 'Bài tập' ? 'Bài tập' : 'tham khảo')) : dataSach);
+  });
+  document.getElementById('searchMuon').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    renderMuon(dataMuon.filter(m => m.name.toLowerCase().includes(q) || m.id.toLowerCase().includes(q)));
+  });
+  document.getElementById('filterTrangThai').addEventListener('change', function() {
+    renderMuon(this.value ? dataMuon.filter(m => m.status === this.value) : dataMuon);
+  });
+  document.getElementById('searchPhat').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    renderPhat(dataPhat.filter(p => p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q)));
+  });
+  document.getElementById('filterThanhToan').addEventListener('change', function() {
+    renderPhat(this.value ? dataPhat.filter(p => p.paid === this.value) : dataPhat);
+  });
+
+  // ── CHART ──
+  function initChart() {
+    const year = document.getElementById('filterNam').value;
+    const ctx = document.getElementById('fineChart').getContext('2d');
+    window.fineChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Tiền phạt (nghìn VND)',
+          data: chartData[year],
+          backgroundColor: 'rgba(26,86,164,0.75)',
+          borderColor: '#1a56a4',
+          borderWidth: 1,
+          borderRadius: 3,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: { label: ctx => ` ${ctx.parsed.y}.000 VND` }
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { family:'IBM Plex Sans', size:12 } } },
+          y: {
+            beginAtZero: true,
+            grid: { color: '#f1f5f9' },
+            ticks: { font: { family:'IBM Plex Sans', size:12 }, callback: v => v + 'k' }
+          }
+        }
+      }
+    });
+  }
+
+  function updateChart() {
+    if (!window.fineChartInstance) return;
+    const year = document.getElementById('filterNam').value;
+    window.fineChartInstance.data.datasets[0].data = chartData[year];
+    window.fineChartInstance.update();
+  }
+
+  // ── EXPORT CSV ──
+  function exportTable(tableId, filename) {
+    const rows = document.querySelectorAll(`#${tableId} tr`);
+    const csv = [...rows].map(r =>
+      [...r.querySelectorAll('th,td')].map(c => `"${c.innerText.trim()}"`).join(',')
+    ).join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+    a.download = filename + '.csv';
+    a.click();
+  }
+
+  // ── INIT ──
+  renderSach(dataSach);
+  renderMuon(dataMuon);
+  renderPhat(dataPhat);
+</script>
 </body>
 </html>
-
