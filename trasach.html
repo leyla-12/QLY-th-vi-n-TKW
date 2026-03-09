@@ -311,20 +311,6 @@
     .btn-create-fine:hover  { background: var(--blue-light); }
     .btn-create-fine:active { transform: scale(0.98); }
 
-    /* ═══════════════════════════════════════
-       PHIẾU PHẠT TRẢ SÁCH
-    ═══════════════════════════════════════ */
-    .fine-slip {
-      display: none;
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 24px 28px;
-      margin-bottom: 32px;
-      box-shadow: var(--shadow-sm);
-    }
-    .fine-slip.visible { display: block; }
-
     /* section title — same style as modal-section-title in muonsach */
     .section-title {
       font-size: 10.5px; font-weight: 700;
@@ -384,6 +370,54 @@
       cursor: pointer; transition: background 0.15s; letter-spacing: 0.2px;
     }
     .btn-luu:hover { background: var(--navy-mid); }
+
+    /* ═══════════════════════════════════════
+       OVERLAY PHIẾU PHẠT (modal giữa màn hình)
+    ═══════════════════════════════════════ */
+    .fine-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(9,17,36,0.55);
+      backdrop-filter: blur(3px);
+      z-index: 300;
+      align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .fine-overlay.show { display: flex; }
+
+    .fine-modal {
+      background: var(--white);
+      border-radius: 14px;
+      width: 100%; max-width: 560px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      animation: modalIn 0.22s ease;
+      overflow: hidden;
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform: translateY(-16px) scale(0.98) }
+      to   { opacity:1; transform: translateY(0) scale(1) }
+    }
+    .fine-modal-head {
+      padding: 18px 24px 16px;
+      border-bottom: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .fine-modal-eyebrow {
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--blue); margin-bottom: 2px;
+    }
+    .fine-modal-title {
+      font-family: 'Lora', serif;
+      font-size: 17px; font-weight: 600; color: var(--navy);
+    }
+    .fine-modal-x {
+      width: 30px; height: 30px;
+      border: none; background: var(--gray-100);
+      border-radius: 6px; cursor: pointer; font-size: 15px;
+      color: var(--gray-500);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.12s;
+    }
+    .fine-modal-x:hover { background: var(--red-bg); color: var(--red); }
 
     /* ═══════════════════════════════════════
        TOAST
@@ -558,31 +592,46 @@
 
   </div>
 
-  <!-- PHIẾU PHẠT TRẢ SÁCH -->
-  <div class="fine-slip" id="fineSlip">
-    <div class="slip-title">Phiếu Phạt Trả Sách</div>
 
-    <div class="section-title">Thông tin phiếu phạt</div>
+</main>
 
-    <div class="fine-meta-grid">
-      <div class="fmg-head">Mã phiếu</div>
-      <div class="fmg-head">Thông tin độc giả</div>
-      <div class="fmg-head">Tiền phạt</div>
+<!-- ════════ MODAL PHIẾU PHẠT ════════ -->
+<div class="fine-overlay" id="fineOverlay">
+  <div class="fine-modal">
 
-      <div class="fmg-val code">PP0023</div>
-      <div class="fmg-val name-box">LÊ THANH NGÂN</div>
-      <div class="fmg-val amount">85.000 VNĐ</div>
+    <div class="fine-modal-head">
+      <div>
+        <div class="fine-modal-eyebrow">Phiếu phạt trả sách</div>
+        <div class="fine-modal-title">Phiếu Phạt Trả Sách</div>
+      </div>
+      <button class="fine-modal-x" id="closeFineModal">&#x2715;</button>
     </div>
 
-    <div class="section-title">Lý do</div>
-    <div class="fine-reason-box">
-      <ul>
-        <li>Quá hạn 5 ngày</li>
-        <li>Mất 2 cuốn sách</li>
-      </ul>
+    <div style="padding: 24px;">
+
+      <div class="section-title">Thông tin phiếu phạt</div>
+
+      <div class="fine-meta-grid">
+        <div class="fmg-head">Mã phiếu</div>
+        <div class="fmg-head">Thông tin độc giả</div>
+        <div class="fmg-head">Tiền phạt</div>
+
+        <div class="fmg-val code">PP0023</div>
+        <div class="fmg-val name-box">LÊ THANH NGÂN</div>
+        <div class="fmg-val amount">85.000 VNĐ</div>
+      </div>
+
+      <div class="section-title">Lý do</div>
+      <div class="fine-reason-box">
+        <ul>
+          <li>Quá hạn 5 ngày</li>
+          <li>Mất 2 cuốn sách</li>
+        </ul>
+      </div>
+
     </div>
 
-    <div class="fine-foot">
+    <div class="fine-foot" style="padding: 16px 24px; border-top: 1.5px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
       <div>
         <span class="fine-total-label">Phí thanh toán:</span>
         <span class="fine-total-val">
@@ -593,9 +642,9 @@
       </div>
       <button class="btn-luu" id="btnSaveFine">Lưu thông tin</button>
     </div>
-  </div>
 
-</main>
+  </div>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="gToast">
@@ -613,7 +662,7 @@
     <h4>Liên hệ</h4>
     <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội<br>
        Điện thoại: (84)24.12.345.678<br>
-       Email: libuniversity@gmail.com</p>
+       Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e68a8f8493888f908394958f929fa6818b878f8ac885898b">[email&#160;protected]</a></p>
   </div>
   <div class="footer-col">
     <h4>Thời gian hoạt động</h4>
@@ -632,7 +681,7 @@
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   const readers = [
     {email:'leengan.k5@gmail.com', id:'PM0034', name:'Lê Thanh Ngân',    cls:'IS01'},
     {email:'admin01@gmail.com',    id:'AD01',   name:'Nguyễn Phương Nhi', cls:'—'},
@@ -664,29 +713,29 @@
       iconEl.innerHTML  = '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>';
       statusEl.className = 'check-status show error';
       document.getElementById('contentArea').classList.remove('visible');
-      document.getElementById('fineSlip').classList.remove('visible');
+      document.getElementById('fineOverlay').classList.remove('show');
     }
   }
 
   document.getElementById('btnCreateFine').addEventListener('click', () => {
-    const slip = document.getElementById('fineSlip');
-    slip.classList.add('visible');
-    slip.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('fineOverlay').classList.add('show');
+  });
+
+  document.getElementById('closeFineModal').addEventListener('click', () => {
+    document.getElementById('fineOverlay').classList.remove('show');
+  });
+
+  document.getElementById('fineOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) e.currentTarget.classList.remove('show');
   });
 
   let toastTimer;
   document.getElementById('btnSaveFine').addEventListener('click', () => {
+    document.getElementById('fineOverlay').classList.remove('show');
     showToast('Lưu phiếu phạt thành công', 'PP0023 – Lê Thanh Ngân · 85.000 VNĐ', 'success');
   });
 
   function showToast(title, detail, type='success') {
     clearTimeout(toastTimer);
     document.getElementById('gToastTitle').textContent  = title;
-    document.getElementById('gToastDetail').textContent = detail;
-    document.getElementById('gToast').className = `toast ${type} show`;
-    toastTimer = setTimeout(hideToast, 4000);
-  }
-  function hideToast() { document.getElementById('gToast').className = 'toast'; }
-</script>
-</body>
-</html>
+    document.getElementById('gToastDetail').textContent = deta
