@@ -1,1 +1,123 @@
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quản lý mượn sách - Library University</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">LIBRARY UNIVERSITY</div>
+    <ul class="nav-menu">
+      <li><a href="thongtin.html">Thông tin chung</a></li>
+      <li><a href="quanlysach.html">Quản lý kho</a></li>
+      <li><a href="muonsach.html" class="active">Quản lý mượn sách</a></li>
+      <li><a href="trasach.html">Quản lý trả sách</a></li>
+      <li><a href="baocao.html">Báo cáo thống kê</a></li>
+    </ul>
+  </nav>
+
+  <!-- Nội dung chính -->
+  <main class="borrow-management">
+    <h1>QUẢN LÝ MƯỢN SÁCH</h1>
+
+    <!-- Danh sách phiếu mượn -->
+    <section class="borrow-list">
+      <h2>Danh sách phiếu mượn</h2>
+      <button class="btn-primary" id="newSlip">TẠO PHIẾU MƯỢN MỚI</button>
+      <table class="borrow-table">
+        <thead>
+          <tr>
+            <th>Mã phiếu</th>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PM0100</td>
+            <td>Lê Thanh Ngân</td>
+            <td>leengan.k5@gmail.com</td>
+            <td>Chưa trả</td>
+            <td>
+              <button class="btn-edit">Sửa</button>
+              <button class="btn-delete">Xóa</button>
+            </td>
+          </tr>
+          <tr>
+            <td>PM0098</td>
+            <td>Lê Thị Tuyết Nhi</td>
+            <td>tuyetnhi@gmail.com</td>
+            <td>Đã trả</td>
+            <td>
+              <button class="btn-edit">Sửa</button>
+              <button class="btn-delete">Xóa</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Form phiếu mượn -->
+    <div id="borrowForm" class="modal hidden">
+      <div class="modal-content">
+        <h2 id="formTitle">Phiếu mượn mới</h2>
+
+        <label>Họ và tên độc giả</label>
+        <input type="text" id="readerName" />
+
+        <label>Email/SĐT</label>
+        <input type="text" id="readerContact" />
+
+        <label>Danh sách sách mượn</label>
+        <textarea id="bookList" rows="3"></textarea>
+
+        <label>Ngày mượn</label>
+        <input type="date" id="borrowDate" />
+
+        <label>Ngày trả</label>
+        <input type="date" id="returnDate" />
+
+        <label>Ghi chú</label>
+        <textarea id="note" rows="2"></textarea>
+
+        <div class="form-actions">
+          <button class="btn-primary" id="saveSlip">Lưu thông tin</button>
+          <button class="btn-secondary" id="resetSlip">Reset</button>
+          <button class="btn-secondary" id="closeForm">Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thông báo -->
+    <div id="notification" class="notification hidden"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-section">
+      <h3>LIÊN HỆ</h3>
+      <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội, Việt Nam</p>
+      <p>Điện thoại: (84)24.12.345.678</p>
+      <p>Email: libuniversity@gmail.com</p>
+    </div>
+    <div class="footer-section">
+      <h3>THỜI GIAN HOẠT ĐỘNG</h3>
+      <p>Thứ 2 - Thứ 6: 8:00 - 21:00</p>
+      <p>Thứ 7: 9:00 - 17:00</p>
+      <p>Chủ nhật: Đóng cửa</p>
+    </div>
+    <div class="footer-section">
+      <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
+      <p>[QR] [Facebook] [YouTube]</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/borrow.js"></script>
+</body>
+</html>
