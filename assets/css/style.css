@@ -260,4 +260,35 @@ footer {
   color: #000;
 }
 .notification.hidden { display: none; }
+/* Quản lý tài khoản */
+.account-management {
+  padding: 20px;
+}
+
+.account-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.account-table th, .account-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.account-table th {
+  background: #004080;
+  color: #fff;
+}
+
+/* Notification */
+.notification {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  background: #f1c40f;
+  color: #000;
+}
+.notification.hidden { display: none; }
 
