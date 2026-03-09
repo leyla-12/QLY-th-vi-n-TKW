@@ -1,14 +1,18 @@
-// Xử lý form đăng nhập
-document.getElementById("loginForm")?.addEventListener("submit", function(e) {
-  e.preventDefault();
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
+// dangnhap.js
+// Logic đăng nhập được xử lý inline trong dangnhap.html
+// File này giữ lại để tương thích cấu trúc project
 
-  if (username && password) {
-    alert("Đăng nhập thành công (demo)!");
-    // TODO: gọi API backend để xác thực tài khoản
-    // Ví dụ: fetch('/api/login', {method:'POST', body: JSON.stringify({username, password})})
-  } else {
-    alert("Vui lòng nhập đầy đủ thông tin.");
-  }
-});
+// TODO: Khi có backend, thay thế logic demo bằng:
+// async function login(username, password) {
+//   const res = await fetch('/api/login', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({ username, password })
+//   });
+//   const data = await res.json();
+//   if (data.token) {
+//     localStorage.setItem('token', data.token);
+//     localStorage.setItem('role', data.role);
+//     window.location.href = data.role === 'admin' ? 'taikhoan.html' : 'quanlysach.html';
+//   }
+// }
