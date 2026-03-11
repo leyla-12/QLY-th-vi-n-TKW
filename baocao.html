@@ -386,15 +386,15 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
       </div>
       <div>
-        <div class="brand-name">LIBRARY</div>
-        <div class="brand-sub">UNIVERSITY</div>
+        <div class="brand-name">LIBRARY UNIVERSITY</div>
+        <div class="brand-sub">Hệ thống quản lý thư viện</div>
       </div>
     </a>
     <nav class="nav-links">
-      <a href="muonsach.html">Mượn sách</a>
+      <a href="taikhoan.html">Quản lý tài khoản</a>
+      <a href="quanlysach.html">Quản lý sách</a>
+      <a href="muonsach.html">Quản lý mượn sách</a>
       <a href="trasach.html">Trả sách</a>
-      <a href="quanlysach.html">Quản lý kho sách</a>
-      <a href="taikhoan.html">Tài khoản</a>
       <a href="baocao.html" class="active">Báo cáo thống kê</a>
     </nav>
     <div class="user-btn" id="userBtn">
@@ -672,7 +672,7 @@
 <footer class="site-footer">
   <div class="footer-col">
     <h4>Liên hệ</h4>
-    <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội<br>Điện thoại: (84)24.12.345.678<br>Email: library@tmu.edu.vn</p>
+    <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội<br>Điện thoại: (84)24.12.345.678<br>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dfb3b6bdadbeada69fabb2aaf1babbaaf1a9b1">[email&#160;protected]</a></p>
   </div>
   <div class="footer-col">
     <h4>Thời gian hoạt động</h4>
@@ -711,7 +711,7 @@
   <span class="toast-close" onclick="this.closest('.toast').classList.remove('show')">✕</span>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ═══════════════════════════════
    DATA
 ═══════════════════════════════ */
@@ -967,16 +967,4 @@ function showToast(msg) {
 const userBtn = document.getElementById('userBtn');
 userBtn.addEventListener('click', e => { e.stopPropagation(); userBtn.classList.toggle('open'); });
 document.addEventListener('click', () => userBtn.classList.remove('open'));
-userBtn.querySelector('.user-dropdown').addEventListener('click', e => e.stopPropagation());
-
-document.getElementById('overlayDetail').addEventListener('click', function(e) {
-  if (e.target === this) closeDetail();
-});
-
-/* ── INIT ── */
-renderSach();
-renderMuon();
-renderPhat();
-</script>
-</body>
-</html>
+userBtn.querySelector('.user-dropdown').addEventListener('click', e => e.stopPropaga
