@@ -4,37 +4,42 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Quản lý tài khoản — Library University</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --blue-700:  #1a56a4;
-      --blue-600:  #1d6cbf;
-      --blue-100:  #dbeafe;
-      --blue-50:   #eff6ff;
-      --red-600:   #dc2626;
-      --red-100:   #fee2e2;
-      --green-600: #16a34a;
-      --green-100: #dcfce7;
-      --amber-600: #d97706;
-      --amber-100: #fef3c7;
-      --gray-900:  #0f172a;
-      --gray-700:  #334155;
-      --gray-500:  #64748b;
-      --gray-300:  #cbd5e1;
-      --gray-200:  #e2e8f0;
-      --gray-100:  #f1f5f9;
-      --gray-50:   #f8fafc;
-      --white:     #ffffff;
-      --border:    #e2e8f0;
+      --navy:       #0f2a5e;
+      --navy-mid:   #163880;
+      --blue:       #1a56c8;
+      --blue-light: #2e6ddf;
+      --blue-50:    #eef4ff;
+      --blue-100:   #d9e8ff;
+      --red:        #c0392b;
+      --red-bg:     #fdf2f1;
+      --red-border: #f5c6c2;
+      --green:      #16a34a;
+      --green-bg:   #f0fdf4;
+      --amber:      #b45309;
+      --amber-bg:   #fffbeb;
+      --gray-900:   #0f172a;
+      --gray-700:   #334155;
+      --gray-500:   #64748b;
+      --gray-400:   #94a3b8;
+      --gray-300:   #cbd5e1;
+      --gray-100:   #f1f5f9;
+      --gray-50:    #f8fafc;
+      --white:      #ffffff;
+      --border:     #e2e8f0;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md:  0 4px 16px rgba(0,0,0,0.10);
+      --shadow-lg:  0 8px 32px rgba(0,0,0,0.14);
     }
 
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
     body {
-      font-family: 'IBM Plex Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 14px;
-      background: var(--gray-50);
+      background: #f0f4f8;
       color: var(--gray-700);
       min-height: 100vh;
       display: flex;
@@ -42,429 +47,492 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ─────────────────────────────
-       TOP BAR
-    ───────────────────────────── */
-    .topbar {
-      background: var(--blue-700);
-      height: 44px;
-      padding: 0 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* ── HEADER ── */
+    .header {
+      background: var(--navy);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      position: sticky; top: 0; z-index: 100;
     }
-    .topbar-brand {
+    .header-inner {
+      display: flex; align-items: center;
+      height: 56px; padding: 0 32px; width: 100%;
+    }
+    .brand {
       display: flex; align-items: center; gap: 10px;
-      text-decoration: none;
+      text-decoration: none; flex-shrink: 0; margin-right: 32px;
     }
     .brand-icon {
-      width: 28px; height: 28px;
+      width: 32px; height: 32px;
       background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 5px;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 7px;
       display: flex; align-items: center; justify-content: center;
     }
-    .brand-name {
-      font-size: 13px; font-weight: 700;
-      color: #fff; letter-spacing: 1.2px;
-    }
-    .topbar-right {
-      display: flex; align-items: center; gap: 6px;
-    }
-    .topbar-right span {
-      font-size: 12px; color: rgba(255,255,255,0.65);
-    }
-    .topbar-user {
-      display: flex; align-items: center; gap: 7px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 4px;
-      padding: 4px 12px;
-      font-size: 12.5px; font-weight: 600; color: #fff;
-      cursor: pointer; position: relative;
-      transition: background 0.15s;
-    }
-    .topbar-user:hover { background: rgba(255,255,255,0.2); }
-    .topbar-user svg { opacity: 0.7; }
-    .user-dropdown {
-      display: none; position: absolute; right: 0; top: calc(100% + 6px);
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 6px; min-width: 180px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.10); z-index: 200;
-    }
-    .topbar-user:hover .user-dropdown { display: block; }
-    .user-dropdown a {
-      display: block; padding: 9px 16px; font-size: 13px;
-      color: var(--gray-700); text-decoration: none;
-      border-bottom: 1px solid var(--gray-100); transition: background 0.1s;
-    }
-    .user-dropdown a:last-child { border-bottom: none; color: var(--red-600); }
-    .user-dropdown a:hover { background: var(--gray-50); }
+    .brand-name { font-size: 12.5px; font-weight: 800; color: #fff; letter-spacing: 1.4px; line-height: 1.2; }
+    .brand-sub  { font-size: 9.5px; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; }
 
-    /* ─────────────────────────────
-       NAVBAR
-    ───────────────────────────── */
-    .navbar {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      height: 48px; padding: 0 32px;
-      display: flex; align-items: center;
-      position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    }
-    .nav-links { display: flex; align-items: center; gap: 0; }
+    .nav-links { display: flex; align-items: center; flex: 1; height: 56px; }
     .nav-links a {
-      font-size: 13.5px; font-weight: 500;
-      color: var(--gray-500); text-decoration: none;
-      padding: 0 18px; height: 48px;
+      font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      padding: 0 16px; height: 56px;
       display: flex; align-items: center;
-      border-bottom: 2px solid transparent;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid transparent;
       transition: color 0.15s, border-color 0.15s;
       white-space: nowrap;
     }
-    .nav-links a:hover { color: var(--blue-600); }
-    .nav-links a.active {
-      color: var(--blue-700); font-weight: 600;
-      border-bottom-color: var(--blue-700);
-    }
+    .nav-links a:hover { color: rgba(255,255,255,0.9); }
+    .nav-links a.active { color: #fff; font-weight: 700; border-bottom-color: #5b9cf6; }
 
-    /* ─────────────────────────────
-       MAIN
-    ───────────────────────────── */
-    main { flex: 1; padding: 28px 32px; }
+    .user-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      font-size: 13px; font-weight: 600; color: #fff;
+      cursor: pointer; position: relative;
+      transition: background 0.15s; flex-shrink: 0; margin-left: auto;
+      user-select: none;
+    }
+    .user-btn:hover { background: rgba(255,255,255,0.18); }
+    .user-avatar {
+      width: 26px; height: 26px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+    .user-dropdown {
+      display: none;
+      position: absolute; right: 0; top: calc(100% + 8px);
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 8px; min-width: 190px;
+      box-shadow: var(--shadow-lg); z-index: 200; overflow: hidden;
+    }
+    .user-btn.open .user-dropdown { display: block; }
+    .user-dropdown a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; font-size: 13px; color: var(--gray-700);
+      text-decoration: none; border-bottom: 1px solid var(--gray-100);
+      transition: background 0.1s;
+    }
+    .user-dropdown a:last-child { border-bottom: none; color: var(--red); }
+    .user-dropdown a:hover { background: var(--gray-50); }
+
+    /* ── WELCOME STRIP ── */
+    .welcome-strip {
+      background: linear-gradient(90deg, #e8f0fe 0%, #f0f6ff 100%);
+      border-bottom: 1px solid #c7d9f7;
+      padding: 8px 32px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .welcome-strip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+    .welcome-strip .name { font-size: 13px; font-weight: 700; color: var(--red); letter-spacing: 0.3px; }
+    .welcome-strip .sub  { font-size: 12px; color: var(--gray-500); }
+
+    /* ── MAIN ── */
+    main { flex: 1; width: 100%; padding: 28px 40px 40px; }
 
     .page-head {
-      display: flex; align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; gap: 20px;
     }
-    .page-title {
-      font-size: 20px; font-weight: 700;
-      color: var(--gray-900); letter-spacing: -0.2px;
-    }
-    .page-sub {
-      font-size: 13px; color: var(--gray-500); margin-top: 2px;
-    }
+    .page-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--blue); margin-bottom: 2px; }
+    .page-title { font-family: 'Lora', serif; font-size: 24px; font-weight: 600; color: var(--navy); letter-spacing: -0.3px; }
 
-    /* toolbar */
-    .toolbar {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
-    }
-    .search-wrap { position: relative; flex: 1; max-width: 380px; }
-    .search-wrap svg {
-      position: absolute; left: 11px; top: 50%;
-      transform: translateY(-50%); color: var(--gray-500); pointer-events: none;
-    }
+    .search-wrap { position: relative; width: 280px; }
+    .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-400); pointer-events: none; }
     .search-input {
-      width: 100%; height: 36px;
-      padding: 0 12px 0 36px;
-      border: 1px solid var(--border); border-radius: 5px;
-      font-size: 13.5px; font-family: inherit; color: var(--gray-700);
+      width: 100%; height: 38px; padding: 0 14px 0 36px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 13px; font-family: inherit; color: var(--gray-700);
       background: var(--white); outline: none;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .search-input:focus {
-      border-color: var(--blue-600);
-      box-shadow: 0 0 0 3px rgba(29,108,191,0.12);
-    }
+    .search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,86,200,0.1); }
     .search-input::placeholder { color: var(--gray-300); }
 
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 6px;
-      height: 36px; padding: 0 16px;
-      background: var(--blue-700); color: #fff;
-      border: none; border-radius: 5px;
-      font-size: 13.5px; font-weight: 600; font-family: inherit;
-      cursor: pointer; white-space: nowrap;
-      transition: background 0.15s;
+    /* ── ACTION BAR ── */
+    .action-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px; gap: 12px;
     }
-    .btn-primary:hover { background: var(--blue-600); }
+    .action-left { display: flex; align-items: center; gap: 10px; }
 
-    /* ─── TABLE ─── */
-    .table-wrap {
+    .btn-primary {
+      display: flex; align-items: center; gap: 7px;
+      height: 38px; padding: 0 18px;
+      background: var(--navy); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; letter-spacing: 0.3px;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover  { background: var(--navy-mid); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .filter-tabs { display: flex; gap: 4px; }
+    .filter-tab {
+      height: 34px; padding: 0 14px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      font-size: 12.5px; font-weight: 600; font-family: inherit;
+      color: var(--gray-500); background: var(--white);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .filter-tab:hover { border-color: var(--blue); color: var(--blue); }
+    .filter-tab.active { background: var(--blue-50); border-color: var(--blue-100); color: var(--blue); }
+
+    /* ── TABLE CARD ── */
+    .table-card {
       background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
       overflow: hidden;
     }
-    table { width: 100%; border-collapse: collapse; }
-    thead tr { background: var(--gray-50); }
-    th {
-      padding: 11px 16px;
-      font-size: 11.5px; font-weight: 700;
-      color: var(--gray-500); text-align: left;
-      border-bottom: 1px solid var(--border);
-      text-transform: uppercase; letter-spacing: 0.6px;
-      white-space: nowrap;
+    .table-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; border-bottom: 1px solid var(--gray-100);
     }
-    td {
-      padding: 12px 16px; font-size: 13.5px;
-      color: var(--gray-700);
+    .table-card-title { font-size: 13px; font-weight: 700; color: var(--gray-900); }
+    .table-count {
+      font-size: 11.5px; font-weight: 600; color: var(--gray-500);
+      background: var(--gray-100); padding: 2px 9px; border-radius: 20px;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: 11px 16px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--gray-400);
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--border);
+      text-align: left; white-space: nowrap;
+    }
+    tbody tr {
       border-bottom: 1px solid var(--gray-100);
+      transition: background 0.1s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gray-50); }
+    tbody td {
+      padding: 13px 16px;
+      font-size: 13px; color: var(--gray-700);
       vertical-align: middle;
     }
-    tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover { background: var(--gray-50); }
 
-    .cell-id { font-weight: 600; color: var(--gray-900); font-size: 13px; }
-    .cell-email { color: var(--gray-500); font-size: 13px; }
+    .td-name { font-weight: 600; color: var(--gray-900); }
+    .td-id   { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
 
-    /* badges — compact, no dot, flat */
-    .badge {
-      display: inline-block;
-      padding: 2px 9px; border-radius: 3px;
+    .role-badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 20px;
       font-size: 11.5px; font-weight: 600;
-      letter-spacing: 0.2px; white-space: nowrap;
     }
-    .badge-admin   { background: var(--blue-100);  color: var(--blue-700);  }
-    .badge-thuthu  { background: var(--amber-100); color: var(--amber-600); }
-    .badge-docgia  { background: var(--green-100); color: var(--green-600); }
-    .badge-active  { background: var(--green-100); color: var(--green-600); }
-    .badge-locked  { background: var(--red-100);   color: var(--red-600);   }
-    .badge-pending { background: var(--amber-100); color: var(--amber-600); }
+    .role-admin   { background: var(--blue-50);  color: var(--blue);  border: 1px solid var(--blue-100); }
+    .role-thu-thu { background: var(--amber-bg); color: var(--amber); border: 1px solid #fde68a; }
+    .role-doc-gia { background: var(--green-bg); color: var(--green); border: 1px solid #bbf7d0; }
 
-    /* action buttons */
-    .act-btns { display: flex; gap: 4px; }
-    .btn-act {
-      height: 30px; padding: 0 10px;
-      border: 1px solid var(--border); border-radius: 4px;
-      background: var(--white); cursor: pointer; font-family: inherit;
-      font-size: 12px; font-weight: 500; color: var(--gray-700);
+    .status-badge {
       display: inline-flex; align-items: center; gap: 5px;
-      transition: all 0.12s;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 11.5px; font-weight: 600;
     }
-    .btn-act:hover { background: var(--gray-100); }
-    .btn-act.del { color: var(--red-600); border-color: var(--red-100); }
-    .btn-act.del:hover { background: var(--red-100); border-color: var(--red-600); }
+    .status-badge::before { content:''; width:6px; height:6px; border-radius:50%; }
+    .status-active   { background: var(--green-bg); color: #15803d; border: 1px solid #bbf7d0; }
+    .status-active::before { background: var(--green); }
+    .status-locked   { background: var(--red-bg);   color: #b91c1c; border: 1px solid var(--red-border); }
+    .status-locked::before { background: var(--red); }
 
-    /* ─────────────────────────────
-       FOOTER BAR
-    ───────────────────────────── */
-    .footer-bar {
-      background: var(--gray-900); color: rgba(255,255,255,0.55);
-      padding: 8px 32px; font-size: 12px;
-      display: flex; gap: 40px; flex-wrap: wrap; align-items: center;
+    .action-btns { display: flex; align-items: center; gap: 6px; }
+    .btn-edit, .btn-delete {
+      display: flex; align-items: center; gap: 5px;
+      height: 30px; padding: 0 12px;
+      border-radius: 6px; font-size: 12px; font-weight: 600;
+      font-family: inherit; cursor: pointer;
+      transition: all 0.15s;
     }
-    .footer-bar span { display: flex; align-items: center; gap: 6px; }
-    .footer-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--blue-600); flex-shrink: 0;
+    .btn-edit {
+      background: var(--blue-50); color: var(--blue);
+      border: 1px solid var(--blue-100);
     }
+    .btn-edit:hover { background: var(--blue-100); }
+    .btn-delete {
+      background: var(--red-bg); color: var(--red);
+      border: 1px solid var(--red-border);
+    }
+    .btn-delete:hover { background: #fbe4e2; }
 
-    /* ─────────────────────────────
-       MODAL
-    ───────────────────────────── */
+    /* ── MODAL OVERLAY ── */
     .overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(15,23,42,0.5);
-      z-index: 300; align-items: center; justify-content: center;
-      padding: 16px;
+      display: none; position: fixed;
+      inset: 0; background: rgba(15,42,94,0.45);
+      z-index: 400; align-items: center; justify-content: center;
+      padding: 24px;
     }
     .overlay.show { display: flex; }
 
-    .modal {
-      background: var(--white); border-radius: 8px;
-      width: 100%; max-width: 560px;
-      border: 1px solid var(--border);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.16);
-      animation: modalIn 0.2s ease;
-    }
     @keyframes modalIn {
-      from { opacity:0; transform:translateY(-12px); }
-      to   { opacity:1; transform:translateY(0); }
+      from { opacity:0; transform: translateY(-20px) scale(0.97); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: 14px;
+      width: 100%; max-width: 560px;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+      animation: modalIn 0.22s ease;
     }
 
     .modal-head {
-      padding: 18px 24px 16px;
-      border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
-    }
-    .modal-title {
-      font-size: 15px; font-weight: 700; color: var(--gray-900);
-    }
-    .modal-x {
-      width: 28px; height: 28px; border: none; background: var(--gray-100);
-      border-radius: 4px; cursor: pointer; font-size: 16px;
-      color: var(--gray-500); display: flex; align-items: center; justify-content: center;
-      transition: all 0.12s;
-    }
-    .modal-x:hover { background: var(--red-100); color: var(--red-600); }
-
-    .modal-body { padding: 20px 24px 24px; }
-
-    .inline-msg {
-      display: none; padding: 9px 14px; border-radius: 5px;
-      font-size: 13px; font-weight: 500; margin-bottom: 16px;
-      border-left: 3px solid;
-    }
-    .inline-msg.show { display: flex; align-items: center; justify-content: space-between; }
-    .inline-msg.success { background: #f0fdf4; border-color: var(--green-600); color: #166534; }
-    .inline-msg.error   { background: #fef2f2; border-color: var(--red-600);   color: #991b1b; }
-    .inline-msg button {
-      background: none; border: none; cursor: pointer;
-      font-size: 15px; opacity: 0.5; padding: 0 2px; line-height: 1;
-    }
-    .inline-msg button:hover { opacity: 1; }
-
-    .form-section-label {
-      font-size: 11px; font-weight: 700; color: var(--gray-500);
-      text-transform: uppercase; letter-spacing: 0.8px;
-      margin-bottom: 12px; padding-bottom: 8px;
+      padding: 20px 24px 16px;
       border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; background: var(--white); z-index: 1;
     }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .modal-eyebrow { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--blue); margin-bottom: 3px; }
+    .modal-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 600; color: var(--navy); }
+    .modal-close {
+      width: 32px; height: 32px; border-radius: 8px;
+      border: 1.5px solid var(--border); background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 16px; color: var(--gray-400);
+      transition: all 0.15s; flex-shrink: 0;
+    }
+    .modal-close:hover { background: var(--gray-50); color: var(--gray-700); }
 
-    .field { display: flex; flex-direction: column; gap: 5px; }
-    .field label {
-      font-size: 12.5px; font-weight: 600; color: var(--gray-700);
+    .modal-body { padding: 20px 24px; }
+
+    .section-label {
+      font-size: 10.5px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--gray-400);
+      margin-bottom: 14px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--gray-100);
     }
-    .field input, .field select {
-      height: 36px; padding: 0 11px;
-      border: 1px solid var(--border); border-radius: 5px;
-      font-size: 13.5px; font-family: inherit; color: var(--gray-700);
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+    .form-grid.full { grid-template-columns: 1fr; }
+    .form-col-span { grid-column: 1 / -1; }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--gray-700); }
+    .form-label span { color: var(--red); margin-left: 2px; }
+    .form-input, .form-select {
+      height: 38px; padding: 0 12px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 13px; font-family: inherit; color: var(--gray-700);
       background: var(--white); outline: none;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .field input:focus, .field select:focus {
-      border-color: var(--blue-600);
-      box-shadow: 0 0 0 3px rgba(29,108,191,0.12);
+    .form-input:focus, .form-select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(26,86,200,0.1);
     }
-    .field input::placeholder { color: var(--gray-300); font-size: 13px; }
-
-    .divider { height: 1px; background: var(--border); margin: 18px 0 16px; }
+    .form-input::placeholder { color: var(--gray-300); }
+    .form-input:read-only { background: var(--gray-50); color: var(--gray-500); cursor: default; }
+    .form-select { cursor: pointer; }
 
     .modal-foot {
-      padding: 14px 24px;
+      display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+      padding: 16px 24px;
       border-top: 1px solid var(--border);
-      display: flex; justify-content: flex-end; gap: 8px;
+      background: var(--gray-50);
+      border-radius: 0 0 14px 14px;
     }
     .btn-cancel {
-      height: 34px; padding: 0 16px;
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 5px; font-size: 13.5px; font-weight: 500;
-      font-family: inherit; color: var(--gray-700); cursor: pointer;
-      transition: background 0.12s;
+      height: 38px; padding: 0 18px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      background: var(--white); color: var(--gray-700);
+      font-size: 13px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: all 0.15s;
     }
-    .btn-cancel:hover { background: var(--gray-100); }
+    .btn-cancel:hover { background: var(--gray-50); border-color: var(--gray-300); }
+
     .btn-save {
-      height: 34px; padding: 0 20px;
-      background: var(--blue-700); color: #fff;
-      border: none; border-radius: 5px;
-      font-size: 13.5px; font-weight: 600; font-family: inherit;
-      cursor: pointer; transition: background 0.12s;
+      height: 38px; padding: 0 22px;
+      background: var(--navy); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: background 0.15s, transform 0.1s;
     }
-    .btn-save:hover { background: var(--blue-600); }
-    .btn-delete {
-      height: 34px; padding: 0 18px;
-      background: var(--red-600); color: #fff;
-      border: none; border-radius: 5px;
-      font-size: 13.5px; font-weight: 600; font-family: inherit;
-      cursor: pointer; transition: background 0.12s;
-    }
-    .btn-delete:hover { background: #b91c1c; }
+    .btn-save:hover  { background: var(--navy-mid); }
+    .btn-save:active { transform: scale(0.98); }
 
-    /* Delete modal */
-    .del-body { padding: 28px 32px; text-align: center; }
-    .del-title { font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
-    .del-desc  { font-size: 13.5px; color: var(--gray-500); line-height: 1.6; }
-    .del-target {
-      display: inline-block; margin-top: 10px;
-      padding: 4px 14px; background: var(--gray-100);
-      border-radius: 4px; font-size: 13px; font-weight: 600; color: var(--gray-700);
+    .btn-delete-confirm {
+      height: 38px; padding: 0 18px;
+      background: var(--red); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: background 0.15s;
     }
+    .btn-delete-confirm:hover { background: #a93226; }
 
-    /* ─────────────────────────────
-       TOAST
-    ───────────────────────────── */
-    .toast {
-      position: fixed; top: 72px; right: 24px;
-      min-width: 280px; max-width: 360px;
+    /* ── DELETE MODAL ── */
+    .delete-modal {
       background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px 16px;
-      display: flex; align-items: center; gap: 10px;
-      font-size: 13.5px; font-weight: 500;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-      z-index: 9999; pointer-events: none;
-      opacity: 0; transform: translateY(-8px);
-      transition: all 0.22s ease;
+      border-radius: 14px;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+      animation: modalIn 0.22s ease;
+      overflow: hidden;
     }
-    .toast.show { opacity: 1; transform: translateY(0); pointer-events: all; }
-    .toast-bar { width: 4px; height: 36px; border-radius: 2px; flex-shrink: 0; }
-    .toast.success .toast-bar { background: var(--green-600); }
-    .toast.error   .toast-bar { background: var(--red-600); }
-    .toast-text { flex: 1; color: var(--gray-700); }
-    .toast-close { cursor: pointer; color: var(--gray-300); font-size: 16px; transition: color 0.1s; }
+    .delete-modal-head {
+      padding: 24px 24px 16px;
+      text-align: center;
+    }
+    .delete-icon {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--red-bg); border: 2px solid var(--red-border);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px;
+    }
+    .delete-modal-title { font-family: 'Lora', serif; font-size: 18px; font-weight: 600; color: var(--gray-900); margin-bottom: 8px; }
+    .delete-modal-desc { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+    .delete-modal-target {
+      margin: 12px 24px 0;
+      padding: 12px 16px;
+      background: var(--red-bg); border: 1px solid var(--red-border);
+      border-radius: 8px; text-align: center;
+      font-size: 13px; font-weight: 700; color: var(--red);
+    }
+    .delete-modal-foot {
+      display: flex; gap: 10px; padding: 20px 24px;
+      justify-content: center;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 28px; right: 28px;
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 14px 16px;
+      box-shadow: var(--shadow-lg); z-index: 999;
+      min-width: 280px; max-width: 360px;
+      opacity: 0; transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .toast-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .toast.success .toast-icon { background: var(--green-bg); color: var(--green); }
+    .toast.error   .toast-icon { background: var(--red-bg);   color: var(--red); }
+    .toast-content { flex: 1; }
+    .toast-title  { font-size: 13px; font-weight: 700; color: var(--gray-900); }
+    .toast-detail { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+    .toast-close { font-size: 14px; color: var(--gray-400); cursor: pointer; padding: 2px; line-height: 1; }
     .toast-close:hover { color: var(--gray-700); }
+
+    /* ── FOOTER ── */
+    .site-footer { background: var(--navy); padding: 28px 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    .footer-col h4 { font-size: 10.5px; font-weight: 800; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
+    .footer-col p { font-size: 12.5px; color: rgba(255,255,255,0.65); line-height: 1.9; }
+    .footer-icons { display: flex; gap: 8px; margin-top: 8px; }
+    .footer-icon { width: 34px; height: 34px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+    .footer-icon:hover { background: rgba(255,255,255,0.2); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      padding: 56px 24px; text-align: center; color: var(--gray-400);
+    }
+    .empty-state svg { margin-bottom: 12px; opacity: 0.4; }
+    .empty-state p { font-size: 13.5px; }
   </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <a class="topbar-brand" href="#">
-    <div class="brand-icon">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
-        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-      </svg>
-    </div>
-    <span class="brand-name">LIBRARY UNIVERSITY</span>
-  </a>
-  <div class="topbar-right">
-    <span>Hệ thống quản lý thư viện</span>
-    <div class="topbar-user">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="#">
+      <div class="brand-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">LIBRARY</div>
+        <div class="brand-sub">UNIVERSITY</div>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="muonsach.html">Mượn sách</a>
+      <a href="trasach.html">Trả sách</a>
+      <a href="quanlysach.html">Quản lý kho sách</a>
+      <a href="taikhoan.html" class="active">Tài khoản</a>
+      <a href="baocao.html">Báo cáo thống kê</a>
+    </nav>
+    <div class="user-btn" id="userBtn">
+      <div class="user-avatar">A</div>
       Admin
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       <div class="user-dropdown">
-        <a href="taikhoan.html">Quản lý tài khoản</a>
-        <a href="dangnhap.html">Đăng xuất</a>
+        <a href="#">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Hồ sơ cá nhân
+        </a>
+        <a href="#">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Cài đặt
+        </a>
+        <a href="#">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Đăng xuất
+        </a>
       </div>
     </div>
   </div>
-</div>
+</header>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <div class="nav-links">
-    <a href="taikhoan.html" class="active">Quản lý tài khoản</a>
-    <a href="quanlysach.html">Quản lý sách</a>
-    <a href="muonsach.html">Quản lý mượn sách</a>
-    <a href="trasach.html">Trả sách</a>
-    <a href="baocao.html">Báo cáo thống kê</a>
-  </div>
-</nav>
+<!-- WELCOME STRIP -->
+<div class="welcome-strip">
+  <div class="dot"></div>
+  <span class="name">NGUYỄN PHƯƠNG NHI</span>
+  <span class="sub">— Xin chào, Admin! Chúc bạn làm việc hiệu quả.</span>
+</div>
 
 <!-- MAIN -->
 <main>
+  <!-- Page Header -->
   <div class="page-head">
     <div>
-      <div class="page-title">Danh sách tài khoản</div>
-      <div class="page-sub">Quản lý toàn bộ tài khoản trong hệ thống</div>
+      <div class="page-label">Thư viện</div>
+      <div class="page-title">Quản lý tài khoản</div>
     </div>
-  </div>
-
-  <div class="toolbar">
     <div class="search-wrap">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="search-input" id="searchInput" type="text" placeholder="Tìm theo tên, ID, email..." />
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-input" type="text" id="searchInput" placeholder="Tìm kiếm tài khoản…" oninput="filterAccounts()">
     </div>
-    <button class="btn-primary" id="btnAdd">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Thêm mới
-    </button>
   </div>
 
-  <div class="table-wrap">
+  <!-- Action Bar -->
+  <div class="action-bar">
+    <div class="action-left">
+      <button class="btn-primary" onclick="openAddModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        THÊM TÀI KHOẢN
+      </button>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="setFilter('all', this)">Tất cả</button>
+      <button class="filter-tab" onclick="setFilter('Admin', this)">Admin</button>
+      <button class="filter-tab" onclick="setFilter('Thủ thư', this)">Thủ thư</button>
+      <button class="filter-tab" onclick="setFilter('Độc giả', this)">Độc giả</button>
+    </div>
+  </div>
+
+  <!-- Table Card -->
+  <div class="table-card">
+    <div class="table-card-header">
+      <span class="table-card-title">Danh sách tài khoản</span>
+      <span class="table-count" id="countBadge">0 tài khoản</span>
+    </div>
     <table>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Họ tên</th>
+          <th>Họ tên / ID</th>
           <th>Lớp</th>
           <th>Email</th>
           <th>Vai trò</th>
@@ -472,258 +540,358 @@
           <th>Hành động</th>
         </tr>
       </thead>
-      <tbody id="accountList"></tbody>
+      <tbody id="accountTable"></tbody>
     </table>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 15h8M9 9h.01M15 9h.01"/></svg>
+      <p>Không tìm thấy tài khoản phù hợp.</p>
+    </div>
   </div>
 </main>
 
 <!-- FOOTER -->
-<div class="footer-bar">
-  <span><span class="footer-dot"></span>Lịch bảo trì hệ thống: 10/3/2026</span>
-  <span><span class="footer-dot"></span>Thủ thư đã cập nhật Giáo trình Cơ sở Dữ liệu – 012346</span>
-  <span><span class="footer-dot"></span>Độc giả đã mượn Giáo trình...</span>
-</div>
+<footer class="site-footer">
+  <div class="footer-col">
+    <h4>Liên hệ</h4>
+    <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội<br>Điện thoại: (84)24.12.345.678<br>Email: library@tmu.edu.vn</p>
+  </div>
+  <div class="footer-col">
+    <h4>Thời gian hoạt động</h4>
+    <p>Thứ 2 – Thứ 6: 8:00 – 21:00<br>Thứ 7: 9:00 – 17:00<br>Chủ nhật: Đóng cửa</p>
+  </div>
+  <div class="footer-col">
+    <h4>Kết nối với chúng tôi</h4>
+    <div class="footer-icons">
+      <div class="footer-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
+      <div class="footer-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon fill="#0f2a5e" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg></div>
+    </div>
+  </div>
+</footer>
 
-<!-- MODAL: TẠO / SỬA -->
-<div class="overlay" id="modalForm">
-  <div class="modal">
+<!-- ── MODAL THÊM / SỬA TÀI KHOẢN ── -->
+<div class="overlay" id="overlayForm">
+  <div class="modal" id="formModal">
     <div class="modal-head">
-      <div class="modal-title" id="modalTitle">Tạo tài khoản mới</div>
-      <button class="modal-x" id="closeModal">&#x2715;</button>
+      <div>
+        <div class="modal-eyebrow" id="formEyebrow">Tài khoản mới</div>
+        <div class="modal-title" id="formTitle">Thêm tài khoản</div>
+      </div>
+      <button class="modal-close" onclick="closeFormModal()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="inline-msg" id="mAlert">
-        <span id="mAlertMsg"></span>
-        <button onclick="closeAlert()">&#x2715;</button>
-      </div>
-      <div class="form-section-label">Thông tin cơ bản</div>
+      <!-- Thông tin cơ bản -->
+      <div class="section-label">Thông tin cơ bản</div>
       <div class="form-grid">
-        <div class="field">
-          <label>Họ tên / Tên người dùng</label>
-          <input type="text" id="fName" placeholder="Nhập họ tên" />
+        <div class="form-group form-col-span">
+          <label class="form-label">Họ tên / Tên người dùng <span>*</span></label>
+          <input class="form-input" type="text" id="fName" placeholder="Nhập họ tên">
         </div>
-        <div class="field">
-          <label>Vai trò</label>
-          <select id="fRole">
+        <div class="form-group">
+          <label class="form-label">ID <span>*</span></label>
+          <input class="form-input" type="text" id="fId" placeholder="VD: TT03, SV0123">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Vai trò <span>*</span></label>
+          <select class="form-select" id="fRole">
             <option value="Admin">Admin</option>
             <option value="Thủ thư">Thủ thư</option>
-            <option value="Độc giả">Độc giả</option>
+            <option value="Độc giả" selected>Độc giả</option>
           </select>
         </div>
-        <div class="field">
-          <label>ID</label>
-          <input type="text" id="fId" placeholder="VD: TT03, SV0123" />
+        <div class="form-group">
+          <label class="form-label">Email mặc định <span>*</span></label>
+          <input class="form-input" type="email" id="fEmail" placeholder="email@gmail.com">
         </div>
-        <div class="field">
-          <label>Trạng thái tài khoản</label>
-          <select id="fStatus">
+        <div class="form-group">
+          <label class="form-label">Mật khẩu mặc định <span>*</span></label>
+          <input class="form-input" type="text" id="fPassword" placeholder="123456789@">
+        </div>
+        <div class="form-group form-col-span">
+          <label class="form-label">Trạng thái tài khoản</label>
+          <select class="form-select" id="fStatus">
             <option value="Hoạt động">Hoạt động</option>
             <option value="Đã khóa">Đã khóa</option>
-            <option value="Chờ kích hoạt">Chờ kích hoạt</option>
           </select>
-        </div>
-        <div class="field">
-          <label>Email mặc định</label>
-          <input type="email" id="fEmail" placeholder="email@gmail.com" />
-        </div>
-        <div class="field">
-          <label>Mật khẩu mặc định</label>
-          <input type="text" id="fPassword" placeholder="123456789@" />
         </div>
       </div>
 
-      <div id="extraFields" style="display:none">
-        <div class="divider"></div>
-        <div class="form-section-label">Thông tin bổ sung</div>
-        <div class="form-grid">
-          <div class="field">
-            <label>Ngày sinh</label>
-            <input type="date" id="fDob" />
-          </div>
-          <div class="field">
-            <label>Lớp</label>
-            <input type="text" id="fClass" placeholder="VD: IS02" />
-          </div>
-          <div class="field">
-            <label>Giới tính</label>
-            <select id="fGender"><option>Nam</option><option>Nữ</option></select>
-          </div>
-          <div class="field">
-            <label>Số điện thoại</label>
-            <input type="text" id="fPhone" placeholder="0123 456 789" />
-          </div>
+      <!-- Thông tin bổ sung -->
+      <div class="section-label">Thông tin bổ sung</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Ngày sinh</label>
+          <input class="form-input" type="date" id="fDob">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lớp</label>
+          <input class="form-input" type="text" id="fClass" placeholder="VD: IS02">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Giới tính</label>
+          <select class="form-select" id="fGender">
+            <option value="Nam">Nam</option>
+            <option value="Nữ">Nữ</option>
+            <option value="Khác">Khác</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Số điện thoại</label>
+          <input class="form-input" type="text" id="fPhone" placeholder="0123 456 789">
         </div>
       </div>
     </div>
     <div class="modal-foot">
-      <button class="btn-cancel" id="cancelForm">Hủy</button>
-      <button class="btn-save" id="btnSave">Tạo tài khoản</button>
+      <button class="btn-cancel" onclick="closeFormModal()">Hủy</button>
+      <button class="btn-save" id="btnSaveForm" onclick="saveForm()">Tạo tài khoản</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL: XÓA -->
-<div class="overlay" id="modalDelete">
-  <div class="modal" style="max-width:420px;">
-    <div class="modal-head">
-      <div class="modal-title">Xác nhận xóa tài khoản</div>
-      <button class="modal-x" id="closeDelete">&#x2715;</button>
+<!-- ── MODAL XÓA ── -->
+<div class="overlay" id="overlayDelete">
+  <div class="delete-modal">
+    <div class="delete-modal-head">
+      <div class="delete-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </div>
+      <div class="delete-modal-title">Xóa tài khoản</div>
+      <div class="delete-modal-desc">Bạn có chắc chắn muốn xóa tài khoản này không?<br>Thao tác này không thể hoàn tác.</div>
     </div>
-    <div class="del-body">
-      <div class="del-title">Xóa tài khoản</div>
-      <p class="del-desc">Bạn có chắc chắn muốn xóa tài khoản này khỏi hệ thống không? Thao tác này không thể hoàn tác.</p>
-      <span class="del-target" id="deleteTarget"></span>
-    </div>
-    <div class="modal-foot">
-      <button class="btn-cancel" id="cancelDelete">Hủy</button>
-      <button class="btn-delete" id="confirmDelete">Xóa tài khoản</button>
+    <div class="delete-modal-target" id="deleteTarget">—</div>
+    <div class="delete-modal-foot">
+      <button class="btn-cancel" onclick="closeDeleteModal()">Hủy</button>
+      <button class="btn-delete-confirm" onclick="confirmDelete()">Xóa tài khoản</button>
     </div>
   </div>
 </div>
 
 <!-- TOAST -->
-<div class="toast" id="gToast">
-  <div class="toast-bar"></div>
-  <span class="toast-text" id="gToastMsg"></span>
-  <span class="toast-close" onclick="hideToast()">&#x2715;</span>
+<div class="toast" id="toast">
+  <div class="toast-icon" id="toastIcon">✓</div>
+  <div class="toast-content">
+    <div class="toast-title"  id="toastTitle"></div>
+    <div class="toast-detail" id="toastDetail"></div>
+  </div>
+  <span class="toast-close" onclick="hideToast()">✕</span>
 </div>
 
-<script src="assets/js/accounts.js"></script>
 <script>
-  let accounts = [
-    {id:'AD01',   name:'Nguyễn Phương Nhi', cls:'—',    email:'admin01@gmail.com',    role:'Admin',   status:'Hoạt động'},
-    {id:'AD02',   name:'Nguyễn Hà Nhi',     cls:'—',    email:'admin02@gmail.com',    role:'Admin',   status:'Đã khóa'},
-    {id:'TT02',   name:'Nguyễn Tuệ Nhi',    cls:'—',    email:'thuthu1@gmail.com',    role:'Thủ thư', status:'Đã khóa'},
-    {id:'SV0054', name:'Trần Bảo Nhi',       cls:'IS01', email:'baonhi@gmail.com',     role:'Độc giả', status:'Hoạt động'},
-    {id:'SV0076', name:'Phạm Yến Nhi',       cls:'IS02', email:'yennhipham@gmail.com', role:'Độc giả', status:'Hoạt động'},
-    {id:'SV0123', name:'Phạm Yến Nhi',       cls:'QT01', email:'phamyennhi@gmail.com', role:'Độc giả', status:'Hoạt động'},
-    {id:'SV1245', name:'Hoàng Uyên Nhi',     cls:'DK02', email:'uynnhi@gmail.com',     role:'Độc giả', status:'Đã khóa'},
-    {id:'SV1011', name:'Trần Tuyết Nhi',     cls:'DK04', email:'tuyetnhi@gmail.com',   role:'Độc giả', status:'Chờ kích hoạt'},
-  ];
-  let editingId=null, deletingId=null;
+/* ── DATA ── */
+let accounts = [
+  { id:'AD01',   name:'Nguyễn Phương Nhi', cls:'—',    email:'admin01@gmail.com',    role:'Admin',    status:'Hoạt động', dob:'', gender:'Nữ',  phone:'', password:'123456789@' },
+  { id:'AD02',   name:'Trần Minh Quân',    cls:'—',    email:'admin02@gmail.com',    role:'Admin',    status:'Đã khóa',   dob:'', gender:'Nam', phone:'', password:'123456789@' },
+  { id:'TT01',   name:'Lê Thị Thu',        cls:'—',    email:'thuthu1@gmail.com',    role:'Thủ thư',  status:'Đã khóa',   dob:'', gender:'Nữ',  phone:'', password:'123456789@' },
+  { id:'PM0100', name:'Lê Thanh Ngân',     cls:'IS01', email:'leengan.k5@gmail.com', role:'Độc giả',  status:'Hoạt động', dob:'', gender:'Nữ',  phone:'', password:'123456789@' },
+  { id:'SV0054', name:'Trần Bảo Nhi',      cls:'IS01', email:'baonhi@gmail.com',     role:'Độc giả',  status:'Hoạt động', dob:'', gender:'Nữ',  phone:'', password:'123456789@' },
+  { id:'SV0076', name:'Phạm Yến Nhi',      cls:'IS02', email:'yennhipham@gmail.com', role:'Độc giả',  status:'Hoạt động', dob:'', gender:'Nữ',  phone:'', password:'123456789@' },
+  { id:'SV0080', name:'Phạm Yến Nhi',      cls:'QT01', email:'phamyennhi@gmail.com', role:'Độc giả',  status:'Hoạt động', dob:'', gender:'Nữ',  phone:'', password:'123456789@' },
+  { id:'SV1001', name:'Lý Uyên Nhi',       cls:'DK02', email:'uynnhi@gmail.com',     role:'Độc giả',  status:'Đã khóa',   dob:'', gender:'Nữ',  phone:'', password:'123456789@' },
+  { id:'SV1011', name:'Trần Tuyết Nhi',    cls:'DK04', email:'tuyetnhi@gmail.com',   role:'Độc giả',  status:'Đã bị hoạt', dob:'', gender:'Nữ', phone:'', password:'123456789@' },
+];
 
-  const roleBadge = r => ({'Admin':'<span class="badge badge-admin">Admin</span>','Thủ thư':'<span class="badge badge-thuthu">Thủ thư</span>'}[r]||'<span class="badge badge-docgia">Độc giả</span>');
-  const statusBadge = s => ({'Hoạt động':'<span class="badge badge-active">Hoạt động</span>','Đã khóa':'<span class="badge badge-locked">Đã khóa</span>','Chờ kích hoạt':'<span class="badge badge-pending">Chờ kích hoạt</span>'}[s]||`<span class="badge badge-pending">${s}</span>`);
+let currentFilter = 'all';
+let editingId = null;
+let deletingId = null;
+let toastTimer = null;
 
-  function renderTable(data) {
-    const tb = document.getElementById('accountList');
-    if (!data.length) {
-      tb.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:40px 16px;font-size:13.5px;">Không tìm thấy kết quả phù hợp</td></tr>`;
+/* ── RENDER ── */
+function roleClass(r) {
+  if (r === 'Admin')   return 'role-admin';
+  if (r === 'Thủ thư') return 'role-thu-thu';
+  return 'role-doc-gia';
+}
+function statusClass(s) {
+  return s === 'Hoạt động' ? 'status-active' : 'status-locked';
+}
+
+function renderTable() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const tbody = document.getElementById('accountTable');
+  const empty = document.getElementById('emptyState');
+
+  let filtered = accounts.filter(a => {
+    const matchFilter = currentFilter === 'all' || a.role === currentFilter;
+    const matchSearch = !q || a.name.toLowerCase().includes(q) || a.id.toLowerCase().includes(q) || a.email.toLowerCase().includes(q);
+    return matchFilter && matchSearch;
+  });
+
+  document.getElementById('countBadge').textContent = filtered.length + ' tài khoản';
+
+  if (!filtered.length) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = filtered.map(a => `
+    <tr>
+      <td>
+        <div class="td-name">${a.name}</div>
+        <div class="td-id">${a.id}</div>
+      </td>
+      <td>${a.cls || '—'}</td>
+      <td>${a.email}</td>
+      <td><span class="role-badge ${roleClass(a.role)}">${a.role}</span></td>
+      <td><span class="status-badge ${statusClass(a.status)}">${a.status}</span></td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-edit" onclick="openEditModal('${a.id}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Sửa
+          </button>
+          <button class="btn-delete" onclick="openDeleteModal('${a.id}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            Xóa
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+/* ── FILTER ── */
+function setFilter(val, el) {
+  currentFilter = val;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderTable();
+}
+function filterAccounts() { renderTable(); }
+
+/* ── MODAL ADD ── */
+function openAddModal() {
+  editingId = null;
+  document.getElementById('formEyebrow').textContent = 'Tài khoản mới';
+  document.getElementById('formTitle').textContent   = 'Thêm tài khoản';
+  document.getElementById('btnSaveForm').textContent = 'Tạo tài khoản';
+  clearForm();
+  document.getElementById('fId').readOnly = false;
+  document.getElementById('overlayForm').classList.add('show');
+}
+
+/* ── MODAL EDIT ── */
+function openEditModal(id) {
+  const a = accounts.find(x => x.id === id);
+  if (!a) return;
+  editingId = id;
+  document.getElementById('formEyebrow').textContent = 'Chỉnh sửa';
+  document.getElementById('formTitle').textContent   = 'Sửa tài khoản';
+  document.getElementById('btnSaveForm').textContent = 'Lưu thay đổi';
+  document.getElementById('fName').value     = a.name;
+  document.getElementById('fId').value       = a.id;
+  document.getElementById('fId').readOnly    = true;
+  document.getElementById('fRole').value     = a.role;
+  document.getElementById('fEmail').value    = a.email;
+  document.getElementById('fPassword').value = a.password || '';
+  document.getElementById('fStatus').value   = a.status === 'Hoạt động' ? 'Hoạt động' : 'Đã khóa';
+  document.getElementById('fDob').value      = a.dob || '';
+  document.getElementById('fClass').value    = a.cls === '—' ? '' : (a.cls || '');
+  document.getElementById('fGender').value   = a.gender || 'Nam';
+  document.getElementById('fPhone').value    = a.phone || '';
+  document.getElementById('overlayForm').classList.add('show');
+}
+
+function closeFormModal() {
+  document.getElementById('overlayForm').classList.remove('show');
+}
+
+function clearForm() {
+  ['fName','fId','fEmail','fPassword','fDob','fClass','fPhone'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fRole').value   = 'Độc giả';
+  document.getElementById('fStatus').value = 'Hoạt động';
+  document.getElementById('fGender').value = 'Nam';
+}
+
+function saveForm() {
+  const name     = document.getElementById('fName').value.trim();
+  const id       = document.getElementById('fId').value.trim();
+  const role     = document.getElementById('fRole').value;
+  const email    = document.getElementById('fEmail').value.trim();
+  const password = document.getElementById('fPassword').value.trim();
+  const status   = document.getElementById('fStatus').value;
+  const dob      = document.getElementById('fDob').value;
+  const cls      = document.getElementById('fClass').value.trim() || '—';
+  const gender   = document.getElementById('fGender').value;
+  const phone    = document.getElementById('fPhone').value.trim();
+
+  if (!name || !id || !email) {
+    showToast('error', 'Thiếu thông tin', 'Vui lòng điền đầy đủ Họ tên, ID và Email.');
+    return;
+  }
+
+  if (editingId) {
+    const idx = accounts.findIndex(a => a.id === editingId);
+    if (idx !== -1) {
+      accounts[idx] = { ...accounts[idx], name, role, email, password, status, dob, cls, gender, phone };
+    }
+    showToast('success', 'Đã cập nhật', `Tài khoản ${name} đã được lưu.`);
+  } else {
+    if (accounts.find(a => a.id === id)) {
+      showToast('error', 'ID trùng lặp', `ID "${id}" đã tồn tại trong hệ thống.`);
       return;
     }
-    tb.innerHTML = data.map(a => `
-      <tr>
-        <td><span class="cell-id">${a.id}</span></td>
-        <td>${a.name}</td>
-        <td>${a.cls}</td>
-        <td><span class="cell-email">${a.email}</span></td>
-        <td>${roleBadge(a.role)}</td>
-        <td>${statusBadge(a.status)}</td>
-        <td>
-          <div class="act-btns">
-            <button class="btn-act" onclick="openEdit('${a.id}')">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-              Sửa
-            </button>
-            <button class="btn-act del" onclick="openDelete('${a.id}')">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-              Xóa
-            </button>
-          </div>
-        </td>
-      </tr>`).join('');
+    accounts.push({ id, name, cls, email, role, status, dob, gender, phone, password });
+    showToast('success', 'Tạo thành công', `Tài khoản ${name} đã được thêm.`);
   }
 
-  document.getElementById('searchInput').addEventListener('input', function() {
-    const q = this.value.toLowerCase();
-    renderTable(accounts.filter(a =>
-      a.name.toLowerCase().includes(q) || a.id.toLowerCase().includes(q) || a.email.toLowerCase().includes(q)
-    ));
-  });
+  closeFormModal();
+  renderTable();
+}
 
-  document.getElementById('btnAdd').addEventListener('click', () => {
-    editingId = null;
-    document.getElementById('modalTitle').textContent = 'Tạo tài khoản mới';
-    document.getElementById('btnSave').textContent = 'Tạo tài khoản';
-    ['fName','fId','fEmail','fPassword','fDob','fClass','fPhone'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('fRole').value = 'Thủ thư';
-    document.getElementById('fStatus').value = 'Hoạt động';
-    document.getElementById('extraFields').style.display = 'none';
-    closeAlert();
-    document.getElementById('modalForm').classList.add('show');
-  });
+/* ── MODAL DELETE ── */
+function openDeleteModal(id) {
+  const a = accounts.find(x => x.id === id);
+  if (!a) return;
+  deletingId = id;
+  document.getElementById('deleteTarget').textContent = `${a.name} — ${a.id}`;
+  document.getElementById('overlayDelete').classList.add('show');
+}
+function closeDeleteModal() {
+  document.getElementById('overlayDelete').classList.remove('show');
+  deletingId = null;
+}
+function confirmDelete() {
+  if (!deletingId) return;
+  const a = accounts.find(x => x.id === deletingId);
+  accounts = accounts.filter(x => x.id !== deletingId);
+  closeDeleteModal();
+  renderTable();
+  showToast('success', 'Đã xóa tài khoản', `${a?.name || ''} đã được xóa khỏi hệ thống.`);
+}
 
-  function openEdit(id) {
-    const a = accounts.find(x => x.id === id); if (!a) return;
-    editingId = id;
-    document.getElementById('modalTitle').textContent = 'Cập nhật thông tin';
-    document.getElementById('btnSave').textContent = 'Lưu thay đổi';
-    document.getElementById('fName').value   = a.name;
-    document.getElementById('fId').value     = a.id;
-    document.getElementById('fEmail').value  = a.email;
-    document.getElementById('fPassword').value = '';
-    document.getElementById('fRole').value   = a.role;
-    document.getElementById('fStatus').value = a.status;
-    document.getElementById('extraFields').style.display = 'block';
-    closeAlert();
-    document.getElementById('modalForm').classList.add('show');
-  }
+/* ── TOAST ── */
+function showToast(type, title, detail) {
+  const el    = document.getElementById('toast');
+  const icon  = document.getElementById('toastIcon');
+  el.className = `toast ${type}`;
+  icon.textContent = type === 'success' ? '✓' : '✕';
+  document.getElementById('toastTitle').textContent  = title;
+  document.getElementById('toastDetail').textContent = detail;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(hideToast, 3500);
+}
+function hideToast() {
+  document.getElementById('toast').classList.remove('show');
+}
 
-  document.getElementById('btnSave').addEventListener('click', () => {
-    const name   = document.getElementById('fName').value.trim();
-    const id     = document.getElementById('fId').value.trim();
-    const email  = document.getElementById('fEmail').value.trim();
-    const role   = document.getElementById('fRole').value;
-    const status = document.getElementById('fStatus').value;
-    if (!name || !id || !email) { showAlert('Vui lòng điền đầy đủ thông tin bắt buộc.', 'error'); return; }
-    if (editingId) {
-      const idx = accounts.findIndex(a => a.id === editingId);
-      accounts[idx] = { ...accounts[idx], name, id, email, role, status };
-      showAlert('Cập nhật thông tin thành công.', 'success');
-      setTimeout(() => { document.getElementById('modalForm').classList.remove('show'); renderTable(accounts); showToast('Cập nhật tài khoản thành công', 'success'); }, 1000);
-    } else {
-      if (accounts.find(a => a.id === id)) { showAlert('ID đã tồn tại trong hệ thống.', 'error'); return; }
-      accounts.push({ id, name, cls: '—', email, role, status });
-      showAlert('Tạo tài khoản thành công.', 'success');
-      setTimeout(() => { document.getElementById('modalForm').classList.remove('show'); renderTable(accounts); showToast('Tạo tài khoản thành công', 'success'); }, 1000);
-    }
-  });
+/* ── DROPDOWN ── */
+const userBtn = document.getElementById('userBtn');
+userBtn.addEventListener('click', e => { e.stopPropagation(); userBtn.classList.toggle('open'); });
+document.addEventListener('click', () => userBtn.classList.remove('open'));
+userBtn.querySelector('.user-dropdown').addEventListener('click', e => e.stopPropagation());
 
-  function openDelete(id) {
-    const a = accounts.find(x => x.id === id);
-    deletingId = id;
-    document.getElementById('deleteTarget').textContent = `${a.name} — ${a.id}`;
-    document.getElementById('modalDelete').classList.add('show');
-  }
-  document.getElementById('confirmDelete').addEventListener('click', () => {
-    accounts = accounts.filter(a => a.id !== deletingId);
-    document.getElementById('modalDelete').classList.remove('show');
-    renderTable(accounts);
-    showToast('Đã xóa tài khoản khỏi hệ thống', 'success');
-  });
+/* ── OVERLAY CLICK OUTSIDE ── */
+document.getElementById('overlayForm').addEventListener('click', function(e) {
+  if (e.target === this) closeFormModal();
+});
+document.getElementById('overlayDelete').addEventListener('click', function(e) {
+  if (e.target === this) closeDeleteModal();
+});
 
-  ['closeModal','cancelForm'].forEach(id => document.getElementById(id).addEventListener('click', () => document.getElementById('modalForm').classList.remove('show')));
-  ['closeDelete','cancelDelete'].forEach(id => document.getElementById(id).addEventListener('click', () => document.getElementById('modalDelete').classList.remove('show')));
-  document.getElementById('modalForm').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('show'); });
-  document.getElementById('modalDelete').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('show'); });
-
-  function showAlert(msg, type='success') {
-    document.getElementById('mAlertMsg').textContent = msg;
-    document.getElementById('mAlert').className = `inline-msg show ${type}`;
-  }
-  function closeAlert() { document.getElementById('mAlert').className = 'inline-msg'; }
-
-  let toastTimer;
-  function showToast(msg, type='success') {
-    clearTimeout(toastTimer);
-    document.getElementById('gToastMsg').textContent = msg;
-    const t = document.getElementById('gToast');
-    t.className = `toast ${type} show`;
-    toastTimer = setTimeout(hideToast, 3500);
-  }
-  function hideToast() { document.getElementById('gToast').className = 'toast'; }
-
-  renderTable(accounts);
+/* ── INIT ── */
+renderTable();
 </script>
 </body>
 </html>
