@@ -356,7 +356,7 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
           Quản lý tài khoản
         </a>
-        <a href="dangnhap.html">
+        <a href="dangnhap.html" onclick="sessionStorage.clear()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Đăng xuất
         </a>
@@ -486,7 +486,7 @@
 <footer class="site-footer">
   <div class="footer-col">
     <h4>Liên hệ</h4>
-    <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội<br>Điện thoại: (84)24.12.345.678<br>Email: libuniversity@gmail.com</p>
+    <p>Địa chỉ: Hồ Tùng Mậu, Từ Liêm, Hà Nội<br>Điện thoại: (84)24.12.345.678<br>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="44282d26312a2d322136372d303d042329252d286a272b29">[email&#160;protected]</a></p>
   </div>
   <div class="footer-col">
     <h4>Thời gian hoạt động</h4>
@@ -501,7 +501,7 @@
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   /* ── USER DROPDOWN ── */
   const userBtn = document.getElementById('userBtn');
   userBtn.addEventListener('click', e => { e.stopPropagation(); userBtn.classList.toggle('open'); });
@@ -672,13 +672,4 @@
     clearTimeout(toastTimer);
     document.getElementById('gToastTitle').textContent  = title;
     document.getElementById('gToastDetail').textContent = detail;
-    document.getElementById('gToast').className = `toast ${type} show`;
-    toastTimer = setTimeout(hideToast, 4000);
-  }
-  function hideToast() { document.getElementById('gToast').className = 'toast'; }
-
-  /* ── INIT ── */
-  renderBooks(books);
-</script>
-</body>
-</html>
+    document.getElementById('gToast').classNam
